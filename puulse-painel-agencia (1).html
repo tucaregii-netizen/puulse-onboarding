@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puulse — Painel da Agência</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root {
+    --bg: #080A0F;
+    --bg-2: #0D1018;
+    --bg-3: #121620;
+    --surface: rgba(255,255,255,0.03);
+    --surface-2: rgba(255,255,255,0.055);
+    --border: rgba(255,255,255,0.07);
+    --border-2: rgba(255,255,255,0.12);
+    --text: #F0F2F5;
+    --text-2: #8A9AB5;
+    --text-3: #4A5568;
+    --red: #C9252D;
+    --red-2: #A8202E;
+    --red-dim: rgba(201,37,45,0.12);
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --font-serif: 'DM Serif Display', serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  ::selection { background: var(--red-dim); color: var(--text); }
+
+  input, button {
+    font-family: var(--font-body);
+  }
+
+  /* ============ LOGIN GATE ============ */
+  .gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .gate-card {
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+
+  .gate-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid rgba(201,37,45,0.25);
+    border-radius: 100px;
+    background: var(--red-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .gate-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--red);
+  }
+
+  .gate h1 {
+    font-family: var(--font-serif);
+    font-size: 32px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .gate p {
+    color: var(--text-2);
+    font-size: 14.5px;
+    margin-bottom: 28px;
+  }
+
+  .gate input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 14px;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .gate input:focus { border-color: var(--red); }
+
+  .gate button {
+    width: 100%;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .gate button:hover { background: var(--red-2); }
+
+  .gate-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    display: none;
+  }
+
+  .gate-error.visible { display: block; }
+
+  /* ============ DASHBOARD ============ */
+  .dash { display: none; min-height: 100vh; }
+  .dash.active { display: block; }
+
+  .dash-topbar {
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,10,15,0.85);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .dash-topbar-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .dash-brand {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dash-brand .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red);
+  }
+
+  .dash-refresh {
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    color: var(--text-2);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .dash-refresh:hover { color: var(--text); border-color: rgba(255,255,255,.22); }
+
+  .dash-main {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .dash-header h1 {
+    font-family: var(--font-serif);
+    font-size: 30px;
+    font-weight: 400;
+  }
+
+  .dash-count {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+
+  .dash-count strong { color: var(--red); }
+
+  .client-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .client-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .client-row:hover { border-color: rgba(201,37,45,.3); background: var(--surface-2); }
+
+  .client-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+
+  .client-status {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .client-status.completo { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .client-status.parcial { background: var(--amber); }
+
+  .client-info { min-width: 0; }
+
+  .client-empresa {
+    font-weight: 600;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .client-meta {
+    font-size: 12.5px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+
+  .client-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .client-date {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-3);
+    white-space: nowrap;
+  }
+
+  .client-arrow { color: var(--text-3); }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-3);
+  }
+
+  .empty-state .es-icon {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+
+  /* ============ DETAIL MODAL ============ */
+  .detail-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 50;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 40px 20px;
+  }
+
+  .detail-overlay.visible { display: flex; }
+
+  .detail-card {
+    background: var(--bg-3);
+    border: 1px solid var(--border-2);
+    border-radius: 16px;
+    max-width: 680px;
+    width: 100%;
+    padding: 32px;
+  }
+
+  .detail-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-head h2 {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .detail-head .dh-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .detail-close {
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    color: var(--text-2);
+    border-radius: 8px;
+    width: 32px; height: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .detail-close:hover { color: var(--text); }
+
+  .detail-section {
+    margin-bottom: 22px;
+  }
+
+  .detail-section .ds-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+
+  .detail-section .ds-value {
+    font-size: 14.5px;
+    color: var(--text);
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+
+  .detail-section .ds-value.empty {
+    color: var(--text-3);
+    font-style: italic;
+  }
+
+  .detail-fleet-table {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  .detail-fleet-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 80px 100px;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-fleet-row:last-child { border-bottom: none; }
+  .detail-fleet-row.head { background: var(--surface); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; color: var(--text-3); }
+
+  @media (max-width: 600px) {
+    .detail-card { padding: 22px; }
+    .detail-fleet-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-badge"><span class="dot"></span>painel restrito</div>
+    <h1>Acesso da agência</h1>
+    <p>Entre com seu e-mail e senha para ver as respostas de onboarding dos clientes.</p>
+    <input type="email" id="gate-email" placeholder="E-mail" style="margin-bottom:10px;" onkeydown="if(event.key==='Enter') document.getElementById('gate-password').focus()">
+    <input type="password" id="gate-password" placeholder="Senha" onkeydown="if(event.key==='Enter') checkPassword()">
+    <button onclick="checkPassword()" id="gate-btn">Entrar →</button>
+    <div class="gate-error" id="gate-error">E-mail ou senha incorretos.</div>
+  </div>
+</div>
+
+<div class="dash" id="dash">
+  <div class="dash-topbar">
+    <div class="dash-topbar-inner">
+      <div class="dash-brand"><span class="dot"></span>puulse · painel da agência</div>
+      <div style="display:flex; gap:10px;">
+        <button class="dash-refresh" onclick="loadClients()">↻ Atualizar</button>
+        <button class="dash-refresh" onclick="logout()">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-main">
+    <div class="dash-header">
+      <h1>Clientes</h1>
+      <div class="dash-count"><strong id="client-count">0</strong> respostas recebidas</div>
+    </div>
+
+    <div class="client-list" id="client-list"></div>
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="es-icon">● nenhum sinal ainda</div>
+      <div>Quando um cliente preencher o onboarding, ele aparece aqui.</div>
+    </div>
+  </div>
+</div>
+
+<div class="detail-overlay" id="detail-overlay" onclick="if(event.target===this) closeDetail()">
+  <div class="detail-card" id="detail-card"></div>
+</div>
+
+<script>
+// ====================== CONFIGURAÇÃO ======================
+const SUPABASE_URL = 'https://jixsqkhwbxpkxrccxpjf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_waWqGLIlXMEQvBOL6bdTxA_arUL_M00';
+
+let supabaseClient = null;
+try {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch (e) {
+  console.error('Supabase SDK não carregou', e);
+}
+
+async function checkPassword() {
+  const email = document.getElementById('gate-email').value.trim();
+  const password = document.getElementById('gate-password').value;
+  const btn = document.getElementById('gate-btn');
+  const errorEl = document.getElementById('gate-error');
+
+  errorEl.classList.remove('visible');
+  btn.textContent = 'Entrando...';
+  btn.disabled = true;
+
+  try {
+    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    showDashboard();
+  } catch (e) {
+    errorEl.textContent = 'E-mail ou senha incorretos.';
+    errorEl.classList.add('visible');
+  } finally {
+    btn.textContent = 'Entrar →';
+    btn.disabled = false;
+  }
+}
+
+function showDashboard() {
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('dash').classList.add('active');
+  loadClients();
+}
+
+async function checkExistingSession() {
+  try {
+    const { data } = await supabaseClient.auth.getSession();
+    if (data && data.session) {
+      showDashboard();
+    }
+  } catch (e) {
+    console.error('Erro ao verificar sessão', e);
+  }
+}
+
+async function logout() {
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+
+checkExistingSession();
+
+let clientsData = [];
+
+const FIELD_LABELS = {
+  instagram: 'Instagram', cidade_regiao: 'Cidade / Região', tempo_operacao: 'Tempo de operação', site: 'Site',
+  estrutura_atual: 'O que já possui', estrutura_atual_outro_detalhe: 'Outro sistema (detalhe)', estrutura_atual_detalhe: 'CRM (detalhe)',
+  qtd_frota: 'Veículos na frota', fluxo_atual: 'Fluxo atual de atendimento',
+  porque_ia: 'Por que quer a IA', esperativa_ia: 'O que espera resolver',
+  gargalo: 'Maior gargalo', gargalo_outro_detalhe: 'Outro gargalo (detalhe)', cenario_ideal: 'Cenário ideal',
+  controle_frota: 'Controle de disponibilidade', controle_frota_detalhe: 'Sistema (detalhe)',
+  api_disponibilidade: 'Tem API de disponibilidade?', api_disponibilidade_detalhe: 'Sistema (detalhe)',
+  documentos: 'Documentos exigidos', documentos_outro_detalhe: 'Outro documento (detalhe)',
+  idade_minima: 'Idade mínima', tempo_cnh: 'Tempo mínimo de CNH', restricao_credito: 'Restrição de crédito',
+  politica_cancelamento: 'Política de cancelamento',
+  politica_precos: 'Política de preços', adicionais: 'Adicionais cobrados', adicionais_outro_detalhe: 'Detalhe adicionais',
+  formas_pagamento: 'Formas de pagamento', politica_desconto: 'Política de desconto',
+  funcao_ia: 'Função da IA', momento_entrada_humana: 'Quando a equipe entra',
+  criterios_qualificacao: 'Critérios de qualificação', criterios_eliminatorios: 'Critérios eliminatórios',
+  tom_comunicacao: 'Tom de comunicação', abordagem_evitar: 'Abordagem a evitar',
+  frase_manter: 'Frase/expressão a manter', nome_ia: 'Nome da IA', nome_ia_detalhe: 'Nome (detalhe)',
+  metas_alugueis: 'Aluguéis/mês desejados', metas_faturamento: 'Faturamento desejado', metas_tempo: 'Tempo para resultado',
+  estrategia_anterior: 'Estratégia anterior que não funcionou', algo_especifico: 'Algo específico que quer ver funcionando',
+  comprometimento: 'Nível de comprometimento (0-10)',
+};
+
+const FIELD_ORDER = [
+  'cidade_regiao', 'tempo_operacao', 'site', 'instagram',
+  'estrutura_atual', 'estrutura_atual_detalhe', 'estrutura_atual_outro_detalhe', 'qtd_frota', 'fluxo_atual',
+  'porque_ia', 'esperativa_ia', 'gargalo', 'gargalo_outro_detalhe', 'cenario_ideal',
+  'controle_frota', 'controle_frota_detalhe', 'api_disponibilidade', 'api_disponibilidade_detalhe',
+  'documentos', 'documentos_outro_detalhe', 'idade_minima', 'tempo_cnh', 'restricao_credito', 'politica_cancelamento',
+  'politica_precos', 'adicionais', 'adicionais_outro_detalhe', 'formas_pagamento', 'politica_desconto',
+  'funcao_ia', 'momento_entrada_humana', 'criterios_qualificacao', 'criterios_eliminatorios',
+  'tom_comunicacao', 'abordagem_evitar', 'frase_manter', 'nome_ia', 'nome_ia_detalhe',
+  'metas_alugueis', 'metas_faturamento', 'metas_tempo', 'estrategia_anterior', 'algo_especifico', 'comprometimento',
+];
+
+function formatValue(val) {
+  if (val === null || val === undefined || val === '') return null;
+  if (Array.isArray(val)) return val.length ? val.join(', ') : null;
+  return String(val);
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' · ' +
+         d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+async function loadClients() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('onboarding_respostas')
+      .select('*')
+      .order('atualizado_em', { ascending: false });
+    if (error) throw error;
+    clientsData = data || [];
+    renderClientList();
+  } catch (e) {
+    console.error('Erro ao carregar clientes', e);
+    document.getElementById('client-list').innerHTML =
+      '<div class="empty-state"><div class="es-icon">⚠ erro de conexão</div><div>Verifique se a URL e a chave do Supabase estão corretas.</div></div>';
+  }
+}
+
+function renderClientList() {
+  const list = document.getElementById('client-list');
+  const empty = document.getElementById('empty-state');
+  document.getElementById('client-count').textContent = clientsData.length;
+
+  if (!clientsData.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.innerHTML = clientsData.map((c, idx) => `
+    <div class="client-row" onclick="openDetail(${idx})">
+      <div class="client-left">
+        <span class="client-status ${c.completo ? 'completo' : 'parcial'}"></span>
+        <div class="client-info">
+          <div class="client-empresa">${c.empresa || '(sem nome)'}</div>
+          <div class="client-meta">${c.nome_completo || ''}</div>
+        </div>
+      </div>
+      <div class="client-right">
+        <div class="client-date">${formatDate(c.atualizado_em)}</div>
+        <div class="client-arrow">→</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openDetail(idx) {
+  const c = clientsData[idx];
+  const r = c.respostas || {};
+
+  let rowsHtml = `
+    <div class="detail-section">
+      <div class="ds-label">WhatsApp</div>
+      <div class="ds-value">${formatValue(c.whatsapp) || '—'}</div>
+    </div>
+  `;
+
+  FIELD_ORDER.forEach(key => {
+    if (key === 'frota_tabela') return;
+    const label = FIELD_LABELS[key];
+    if (!label) return;
+    const val = formatValue(r[key]);
+    rowsHtml += `
+      <div class="detail-section">
+        <div class="ds-label">${label}</div>
+        <div class="ds-value ${val ? '' : 'empty'}">${val || 'Não respondido'}</div>
+      </div>
+    `;
+  });
+
+  if (r.frota_tabela) {
+    const cats = Object.keys(r.frota_tabela);
+    const hasData = cats.some(cat => {
+      const row = r.frota_tabela[cat];
+      return row && (row.modelo || row.qtd || row.diaria);
+    });
+    if (hasData) {
+      let fleetHtml = `<div class="detail-fleet-row head"><div>Categoria</div><div>Modelo</div><div>Qtd.</div><div>Diária</div></div>`;
+      cats.forEach(cat => {
+        const row = r.frota_tabela[cat];
+        if (row && (row.modelo || row.qtd || row.diaria)) {
+          fleetHtml += `<div class="detail-fleet-row"><div>${cat}</div><div>${row.modelo || '—'}</div><div>${row.qtd || '—'}</div><div>${row.diaria || '—'}</div></div>`;
+        }
+      });
+      rowsHtml += `
+        <div class="detail-section">
+          <div class="ds-label">Categorias de veículos</div>
+          <div class="detail-fleet-table">${fleetHtml}</div>
+        </div>
+      `;
+    }
+  }
+
+  document.getElementById('detail-card').innerHTML = `
+    <div class="detail-head">
+      <div>
+        <h2>${c.empresa || '(sem nome)'}</h2>
+        <div class="dh-meta">${c.nome_completo || ''} · ${c.completo ? 'Onboarding completo' : 'Em andamento'} · atualizado em ${formatDate(c.atualizado_em)}</div>
+      </div>
+      <button class="detail-close" onclick="closeDetail()">×</button>
+    </div>
+    ${rowsHtml}
+  `;
+  document.getElementById('detail-overlay').classList.add('visible');
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('visible');
+}
+</script>
+</body>
+</html>

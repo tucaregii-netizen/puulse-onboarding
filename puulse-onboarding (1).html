@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Puulse — Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root {
+    --bg: #080A0F;
+    --bg-2: #0D1018;
+    --bg-3: #121620;
+    --surface: rgba(255,255,255,0.03);
+    --surface-2: rgba(255,255,255,0.055);
+    --border: rgba(255,255,255,0.07);
+    --border-2: rgba(255,255,255,0.12);
+    --text: #F0F2F5;
+    --text-2: #8A9AB5;
+    --text-3: #4A5568;
+    --red: #C9252D;
+    --red-2: #A8202E;
+    --red-dim: rgba(201,37,45,0.12);
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --font-serif: 'DM Serif Display', serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: .4;
+  }
+
+  ::selection { background: var(--red-dim); color: var(--text); }
+
+  input, select, textarea {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--text-3); }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--red);
+    background: var(--surface-2);
+  }
+
+  textarea { resize: vertical; min-height: 90px; font-family: var(--font-body); line-height: 1.5; }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(8,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topbar-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px 20px 14px;
+  }
+
+  .topbar-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .brand {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brand .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    box-shadow: 0 0 8px var(--red);
+    animation: pulse-dot 2s ease-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand .dot { animation: none; }
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(.85); }
+  }
+
+  .step-counter {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-3);
+  }
+
+  .step-counter strong { color: var(--red); }
+
+  .progress-track {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--red);
+    border-radius: 100px;
+    transition: width 0.4s cubic-bezier(0.65,0,0.35,1);
+  }
+
+  /* ============ MAIN ============ */
+  main {
+    width: 100%;
+    max-width: 640px;
+    flex: 1;
+    padding: 40px 20px 140px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stage-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--red);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stage-eyebrow::before {
+    content: '';
+    width: 22px; height: 1px;
+    background: var(--red);
+  }
+
+  .step-block {
+    display: none;
+    animation: rise 0.4s ease both;
+  }
+
+  .step-block.active { display: block; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step-block { animation: none; }
+  }
+
+  h1.step-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(26px, 5.5vw, 34px);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .step-sub {
+    font-size: 15px;
+    color: var(--text-2);
+    margin-bottom: 32px;
+    line-height: 1.55;
+  }
+
+  .field-group {
+    margin-bottom: 22px;
+  }
+
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 9px;
+    color: var(--text);
+  }
+
+  /* Choice chips */
+  .choice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .choice-item {
+    border: 1px solid var(--border-2);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--surface);
+  }
+
+  .choice-item:hover { border-color: rgba(201,37,45,.35); }
+
+  .choice-item.selected {
+    border-color: var(--red);
+    background: var(--red-dim);
+  }
+
+  .choice-mark {
+    width: 20px; height: 20px;
+    border-radius: 6px;
+    border: 1.5px solid var(--text-3);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+
+  .choice-item.single .choice-mark { border-radius: 50%; }
+
+  .choice-item.selected .choice-mark {
+    border-color: var(--red);
+    background: var(--red);
+  }
+
+  .choice-mark svg { opacity: 0; transition: opacity 0.1s ease; width: 12px; height: 12px; }
+  .choice-item.selected .choice-mark svg { opacity: 1; }
+
+  .choice-label { font-size: 15px; color: var(--text); }
+
+  .choice-extra-input {
+    margin-top: 10px;
+    display: none;
+  }
+
+  .choice-extra-input.visible { display: block; }
+
+  /* Mini table for fleet */
+  .fleet-table {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-3);
+  }
+
+  .fleet-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+
+  .fleet-row:last-child { border-bottom: none; }
+
+  .fleet-row.head {
+    background: rgba(255,255,255,.02);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+  }
+
+  .fleet-cat {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .fleet-row input {
+    padding: 9px 10px;
+    font-size: 13.5px;
+    border-radius: 7px;
+  }
+
+  @media (max-width: 480px) {
+    .fleet-row { grid-template-columns: 1fr; gap: 6px; }
+    .fleet-row.head { display: none; }
+    .fleet-cat { padding-top: 6px; }
+  }
+
+  /* Slider for commitment 0-10 */
+  .slider-wrap {
+    padding: 8px 4px;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 100px;
+    background: var(--border-2);
+    accent-color: var(--red);
+    padding: 0;
+    border: none;
+  }
+
+  .slider-readout {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-3);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .slider-readout .val {
+    font-size: 30px;
+    font-family: var(--font-serif);
+    font-weight: 400;
+    color: var(--red);
+    order: -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 480px) {
+    .slider-readout .val { order: 0; width: auto; }
+  }
+
+  /* ============ BOTTOM NAV ============ */
+  .bottombar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(8,10,15,0) 0%, rgba(8,10,15,0.97) 35%);
+    padding: 28px 20px 22px;
+    display: flex;
+    justify-content: center;
+    z-index: 15;
+  }
+
+  .bottombar-inner {
+    max-width: 640px;
+    width: 100%;
+    display: flex;
+    gap: 12px;
+  }
+
+  button {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-next {
+    flex: 1;
+    background: var(--red);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-next:hover { background: var(--red-2); transform: translateY(-1px); }
+  .btn-next:active { transform: scale(0.98); }
+
+  .btn-back {
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    color: var(--text-2);
+    padding: 16px 18px;
+  }
+
+  .btn-back:hover { color: var(--text); border-color: rgba(255,255,255,.22); }
+
+  /* ============ INTRO / DONE SCREENS ============ */
+  .intro-screen, .done-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 10vh;
+    position: relative;
+  }
+
+  .intro-ambient {
+    position: absolute;
+    width: 600px; height: 600px;
+    top: -120px; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(201,37,45,0.10) 0%, transparent 65%);
+    pointer-events: none;
+    animation: orb-breathe 8s ease-in-out infinite;
+    z-index: 0;
+  }
+
+  @keyframes orb-breathe {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    50% { transform: translateX(-50%) scale(1.08); opacity: .7; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro-ambient { animation: none; }
+  }
+
+  .intro-badge {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid rgba(201,37,45,0.25);
+    border-radius: 100px;
+    background: var(--red-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .intro-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--red);
+    animation: pulse-dot 2s infinite;
+  }
+
+  .intro-screen h1 {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 7vw, 46px);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+  }
+
+  .intro-screen h1 em { font-style: italic; color: var(--red); }
+
+  .intro-screen p {
+    position: relative;
+    z-index: 1;
+    font-size: 16px;
+    color: var(--text-2);
+    max-width: 460px;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+
+  .intro-meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 28px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .intro-meta-item { text-align: left; }
+
+  .intro-meta-item .imn {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .intro-meta-item .iml {
+    font-size: 11px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .btn-start {
+    position: relative;
+    z-index: 1;
+    background: var(--red);
+    color: white;
+    padding: 16px 32px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .btn-start:hover { background: var(--red-2); transform: translateY(-1px); }
+
+  .save-status {
+    position: relative;
+    z-index: 1;
+    margin-top: 28px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .save-status.saved { color: var(--green); }
+  .save-status.error { color: var(--red); }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar" style="display:none;">
+  <div class="topbar-inner">
+    <div class="topbar-row">
+      <div class="brand"><span class="dot"></span>puulse · onboarding</div>
+      <div class="step-counter">PASSO <strong id="step-current">1</strong> / <span id="step-total">20</span></div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<main id="main">
+
+  <div class="intro-screen" id="intro-screen">
+    <div class="intro-ambient" aria-hidden="true"></div>
+    <div class="intro-badge"><span class="dot"></span>infraestrutura de receita · ai-native</div>
+    <h1>Bem-vindo à <em>Puulse.</em></h1>
+    <p>Esse formulário leva poucos minutos e é o que define como o seu agente de IA vai atender, qualificar e fechar leads. Quanto mais completo, mais rápido o agente entra no ar funcionando do jeito certo.</p>
+    <div class="intro-meta">
+      <div class="intro-meta-item"><div class="imn" id="intro-step-count">20</div><div class="iml">etapas</div></div>
+      <div class="intro-meta-item"><div class="imn">~6min</div><div class="iml">tempo médio</div></div>
+      <div class="intro-meta-item"><div class="imn">auto</div><div class="iml">salva sozinho</div></div>
+    </div>
+    <button class="btn-start" onclick="startForm()">Começar onboarding →</button>
+  </div>
+
+  <form id="form-root" style="display:none;"></form>
+
+  <div class="done-screen" id="done-screen" style="display:none;">
+    <div class="intro-ambient" aria-hidden="true"></div>
+    <div class="intro-badge"><span class="dot"></span>sinal recebido</div>
+    <h1>Pulso <em>ativo.</em></h1>
+    <p>Suas respostas já estão salvas. O time da Puulse vai usar isso para configurar o agente de IA da sua operação.</p>
+    <div class="save-status saved" id="final-save-status">✓ Dados salvos com sucesso</div>
+  </div>
+
+</main>
+
+<div class="bottombar" id="bottombar" style="display:none;">
+  <div class="bottombar-inner">
+    <button class="btn-back" id="btn-back" onclick="goBack()">←</button>
+    <button class="btn-next" id="btn-next" onclick="goNext()">Continuar →</button>
+  </div>
+</div>
+
+<script>
+// ====================== CONFIGURAÇÃO SUPABASE ======================
+// Substitua pelos valores do seu projeto (Settings → API no painel Supabase)
+const SUPABASE_URL = 'https://jixsqkhwbxpkxrccxpjf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_waWqGLIlXMEQvBOL6bdTxA_arUL_M00';
+
+let supabaseClient = null;
+try {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} catch (e) {
+  console.error('Supabase SDK não carregou', e);
+}
+
+// ====================== SCHEMA ======================
+const STEPS = [
+  { id: 'client_meta', type: 'fields', eyebrow: 'Identificação', title: 'Quem está respondendo?', sub: 'Isso identifica sua empresa no nosso sistema — todas as respostas seguintes ficam vinculadas a ela.',
+    fields: [
+      { key: 'empresa', label: 'Nome da empresa / locadora', type: 'text', required: true, placeholder: 'Ex: Moven' },
+      { key: 'nome_completo', label: 'Seu nome completo', type: 'text', required: true, placeholder: 'Ex: Arthur Silva' },
+      { key: 'whatsapp', label: 'WhatsApp principal', type: 'text', required: true, placeholder: '(00) 00000-0000' },
+    ]
+  },
+  { id: 'sec1', type: 'fields', eyebrow: '1 · Informações gerais', title: 'Sobre a operação', sub: '',
+    fields: [
+      { key: 'instagram', label: 'Instagram', type: 'text', placeholder: '@suaempresa' },
+      { key: 'cidade_regiao', label: 'Cidade / Região de atuação', type: 'text', required: true },
+      { key: 'tempo_operacao', label: 'Há quanto tempo opera?', type: 'text', placeholder: 'Ex: 1 ano e meio' },
+      { key: 'site', label: 'Site (se tiver)', type: 'text', placeholder: 'https://' },
+    ]
+  },
+  { id: 'sec2_q1', type: 'fields', eyebrow: '2 · Estrutura atual', title: 'O que você já tem hoje', sub: 'Selecione tudo que se aplica, e diga o tamanho da frota.',
+    fields: [
+      { key: 'estrutura_atual', label: 'Você já possui:', type: 'multi', options: ['CRM', 'Lista de contatos / leads anteriores', 'Base de clientes ativos', 'Equipe de atendimento'], allowOther: true, otherLabel: 'Outro sistema? Qual?', followUpOn: ['CRM'], followUpLabel: 'Qual CRM? Tem API?' },
+      { key: 'qtd_frota', label: 'Quantos veículos na frota?', type: 'text', required: true, placeholder: 'Ex: 200+' },
+    ]
+  },
+  { id: 'sec2_q2', type: 'fields', eyebrow: '2 · Estrutura atual', title: 'Do lead até a retirada do carro', sub: 'Como funciona hoje, na prática, o atendimento de um lead desde o primeiro contato até ele retirar o carro?',
+    fields: [
+      { key: 'fluxo_atual', label: '', type: 'textarea', placeholder: 'Descreva o passo a passo atual...' },
+    ]
+  },
+  { id: 'sec3_q1', type: 'fields', eyebrow: '3 · Objetivo com a IA', title: 'Por que a IA, e o que ela resolve', sub: '',
+    fields: [
+      { key: 'porque_ia', label: 'Por que você quer implementar a IA?', type: 'textarea' },
+      { key: 'esperativa_ia', label: 'O que você espera que ela resolva na sua rotina?', type: 'textarea' },
+    ]
+  },
+  { id: 'sec3_q3', type: 'fields', eyebrow: '3 · Objetivo com a IA', title: 'Seu maior gargalo hoje', sub: 'Selecione tudo que se aplica.',
+    fields: [
+      { key: 'gargalo', label: '', type: 'multi', options: ['Demora no primeiro atendimento', 'Leads que somem sem resposta', 'Falta de follow-up', 'Falta de organização / CRM', 'Atendimento fora do horário comercial'], allowOther: true, otherLabel: 'Outro motivo' },
+    ]
+  },
+  { id: 'sec3_q4', type: 'fields', eyebrow: '3 · Objetivo com a IA', title: 'O que seria um cenário ideal após a implementação?', sub: '',
+    fields: [ { key: 'cenario_ideal', label: '', type: 'textarea' } ]
+  },
+  { id: 'sec4_q1', type: 'fields', eyebrow: '4 · Frota e disponibilidade', title: 'Controle de disponibilidade', sub: '',
+    fields: [
+      { key: 'controle_frota', label: 'Como você controla a disponibilidade dos veículos hoje?', type: 'single', options: ['Planilha manual', 'Sistema próprio', 'Sistema de terceiros', 'Não controlo formalmente'], followUpOn: ['Sistema próprio', 'Sistema de terceiros'], followUpLabel: 'Qual sistema? Tem API?' },
+      { key: 'api_disponibilidade', label: 'Existe API que poderíamos integrar para consultar disponibilidade?', type: 'single', options: ['Sim', 'Não', 'Não sei'], followUpOn: ['Sim'], followUpLabel: 'Qual sistema?' },
+    ]
+  },
+  { id: 'sec4_q3', type: 'fields', eyebrow: '4 · Frota e disponibilidade', title: 'Categorias de veículos', sub: 'Preencha conforme sua frota atual — pode deixar em branco o que não tiver.',
+    fields: [ { key: 'frota_tabela', label: '', type: 'fleet_table' } ]
+  },
+  { id: 'sec5_q1', type: 'fields', eyebrow: '5 · Processo de aluguel', title: 'Documentos e condições mínimas', sub: '',
+    fields: [
+      { key: 'documentos', label: 'Quais documentos o cliente precisa apresentar?', type: 'multi', options: ['CNH', 'CPF', 'Comprovante de residência', 'Cartão de crédito'], allowOther: true, otherLabel: 'Outro documento' },
+      { key: 'idade_minima', label: 'Idade mínima', type: 'text', placeholder: 'Ex: 21 anos' },
+      { key: 'tempo_cnh', label: 'Tempo mínimo de CNH', type: 'text', placeholder: 'Ex: 2 anos' },
+      { key: 'restricao_credito', label: 'Restrições de crédito?', type: 'text', placeholder: 'Ex: não aceita nome negativado' },
+    ]
+  },
+  { id: 'sec5_q3', type: 'fields', eyebrow: '5 · Processo de aluguel', title: 'Como funciona a política de cancelamento?', sub: '',
+    fields: [ { key: 'politica_cancelamento', label: '', type: 'textarea' } ]
+  },
+  { id: 'sec6_q1', type: 'fields', eyebrow: '6 · Valores e cobrança', title: 'Preço e adicionais', sub: '',
+    fields: [
+      { key: 'politica_precos', label: 'Como funciona a política de preços?', type: 'single', options: ['Tabela fixa por categoria', 'Preço dinâmico (varia por data/demanda)', 'Negociado caso a caso'] },
+      { key: 'adicionais', label: 'Quais adicionais são cobrados?', type: 'multi', options: ['Seguro', 'GPS', 'Cadeirinha infantil', 'Motorista adicional', 'Franquia de KM'], allowOther: true, otherLabel: 'Detalhe (seguro obrigatório? como funciona a franquia?)' },
+    ]
+  },
+  { id: 'sec6_q3', type: 'fields', eyebrow: '6 · Valores e cobrança', title: 'Pagamento e desconto', sub: '',
+    fields: [
+      { key: 'formas_pagamento', label: 'Como o pagamento é realizado?', type: 'multi', options: ['Cartão de crédito', 'PIX', 'Boleto', 'Caução / depósito'], allowOther: true },
+      { key: 'politica_desconto', label: 'Existe política de desconto? Quando e como funciona?', type: 'textarea' },
+    ]
+  },
+  { id: 'sec7_q1', type: 'fields', eyebrow: '7 · Função da IA no processo', title: 'O que a IA deve fazer', sub: 'Selecione tudo que se aplica.',
+    fields: [
+      { key: 'funcao_ia', label: '', type: 'multi', options: ['Primeiro atendimento', 'Qualificação do lead', 'Envio de fotos e catálogo', 'Informar disponibilidade', 'Informar valores e condições', 'Follow-up automático', 'Atualização do CRM automaticamente'] },
+      { key: 'momento_entrada_humana', label: 'Em qual momento você (ou sua equipe) quer entrar no atendimento?', type: 'textarea' },
+    ]
+  },
+  { id: 'sec8_q1', type: 'fields', eyebrow: '8 · Qualificação do lead', title: 'Quando um lead está qualificado', sub: 'Selecione tudo que se aplica.',
+    fields: [
+      { key: 'criterios_qualificacao', label: 'Um lead está qualificado quando:', type: 'multi', options: ['Informou data de retirada e devolução', 'Definiu a categoria de veículo desejada', 'Confirmou que possui os documentos exigidos', 'Confirmou a forma de pagamento', 'Confirmou cidade / local de retirada'], allowOther: true },
+      { key: 'criterios_eliminatorios', label: 'Existe critério eliminatório (desqualificação imediata)?', type: 'multi', options: ['Menor de 21 anos', 'CNH com menos de 2 anos', 'Não possui cartão de crédito'], allowOther: true },
+    ]
+  },
+  { id: 'sec9_q1', type: 'fields', eyebrow: '9 · Tom de comunicação', title: 'Como a IA deve falar', sub: '',
+    fields: [
+      { key: 'tom_comunicacao', label: 'Como você se comunica com seus clientes?', type: 'single', options: ['Direto e objetivo', 'Consultivo', 'Próximo / amigável', 'Formal'] },
+      { key: 'abordagem_evitar', label: 'Existe alguma abordagem que você NÃO quer que a IA use?', type: 'textarea' },
+    ]
+  },
+  { id: 'sec9_q3', type: 'fields', eyebrow: '9 · Tom de comunicação', title: 'Identidade da IA', sub: '',
+    fields: [
+      { key: 'frase_manter', label: 'Frase ou expressão que você costuma usar e quer manter?', type: 'textarea' },
+      { key: 'nome_ia', label: 'Prefere que a IA se apresente com um nome?', type: 'single', options: ['Sim', 'Não, só o nome da empresa'], followUpOn: ['Sim'], followUpLabel: 'Qual nome?' },
+    ]
+  },
+  { id: 'sec10_q1', type: 'fields', eyebrow: '10 · Expectativas e metas', title: 'Suas metas', sub: '',
+    fields: [
+      { key: 'metas_alugueis', label: 'Quantos aluguéis/mês você quer atingir?', type: 'text' },
+      { key: 'metas_faturamento', label: 'Faturamento mensal que busca?', type: 'text' },
+      { key: 'metas_tempo', label: 'Em quanto tempo espera ver resultado?', type: 'text' },
+    ]
+  },
+  { id: 'sec10_q2', type: 'fields', eyebrow: '10 · Expectativas e metas', title: 'Mais um pouco de contexto', sub: '',
+    fields: [
+      { key: 'estrategia_anterior', label: 'Tem alguma estratégia que você já tentou e não funcionou?', type: 'textarea' },
+      { key: 'algo_especifico', label: 'Existe algo específico que você quer muito ver funcionando?', type: 'textarea' },
+    ]
+  },
+  { id: 'extra', type: 'fields', eyebrow: '🔥 Extra', title: 'Seu nível de comprometimento', sub: 'De 0 a 10, o quanto você está comprometido com esse projeto?',
+    fields: [ { key: 'comprometimento', label: '', type: 'slider' } ]
+  },
+];
+
+let currentStep = 0;
+let answers = {};
+let clientId = null;
+
+function el(tag, attrs, children) {
+  const e = document.createElement(tag);
+  if (attrs) for (const k in attrs) {
+    if (k === 'class') e.className = attrs[k];
+    else if (k === 'html') e.innerHTML = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  }
+  if (children) children.forEach(c => c && e.appendChild(c));
+  return e;
+}
+
+function startForm() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('form-root').style.display = 'block';
+  document.getElementById('topbar').style.display = 'block';
+  document.getElementById('bottombar').style.display = 'flex';
+  document.getElementById('step-total').textContent = STEPS.length;
+  renderForm();
+  renderStep(0);
+}
+
+function renderForm() {
+  const root = document.getElementById('form-root');
+  root.innerHTML = '';
+  STEPS.forEach((step, idx) => {
+    const block = el('div', { class: 'step-block', id: 'step-' + idx });
+    block.appendChild(el('div', { class: 'stage-eyebrow' }, [document.createTextNode(step.eyebrow)]));
+    block.appendChild(el('h1', { class: 'step-title' }, [document.createTextNode(step.title)]));
+    if (step.sub) block.appendChild(el('p', { class: 'step-sub' }, [document.createTextNode(step.sub)]));
+    step.fields.forEach(f => block.appendChild(renderField(f)));
+    root.appendChild(block);
+  });
+}
+
+function renderField(f) {
+  const group = el('div', { class: 'field-group' });
+  if (f.label) group.appendChild(el('label', { class: 'field-label' }, [document.createTextNode(f.label)]));
+
+  if (f.type === 'text') {
+    const input = el('input', { type: 'text', placeholder: f.placeholder || '', 'data-key': f.key });
+    input.value = answers[f.key] || '';
+    input.addEventListener('input', e => { answers[f.key] = e.target.value; });
+    group.appendChild(input);
+  }
+
+  if (f.type === 'textarea') {
+    const ta = el('textarea', { placeholder: f.placeholder || 'Escreva aqui...', 'data-key': f.key });
+    ta.value = answers[f.key] || '';
+    ta.addEventListener('input', e => { answers[f.key] = e.target.value; });
+    group.appendChild(ta);
+  }
+
+  if (f.type === 'single' || f.type === 'multi') {
+    const list = el('div', { class: 'choice-list' });
+    const isMulti = f.type === 'multi';
+    if (!answers[f.key]) answers[f.key] = isMulti ? [] : null;
+
+    f.options.forEach(opt => {
+      const item = el('div', { class: 'choice-item' + (isMulti ? '' : ' single') });
+      const mark = el('div', { class: 'choice-mark' }, [
+        el('svg', { viewBox: '0 0 12 12', fill: 'none' }, [])
+      ]);
+      mark.querySelector('svg').innerHTML = '<path d="M2 6L4.5 8.5L10 3" stroke="#06231A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+      const label = el('div', { class: 'choice-label' }, [document.createTextNode(opt)]);
+      item.appendChild(mark);
+      item.appendChild(label);
+
+      const isSelected = isMulti ? answers[f.key].includes(opt) : answers[f.key] === opt;
+      if (isSelected) item.classList.add('selected');
+
+      item.addEventListener('click', () => {
+        if (isMulti) {
+          const arr = answers[f.key];
+          const i = arr.indexOf(opt);
+          if (i >= 0) { arr.splice(i, 1); item.classList.remove('selected'); }
+          else { arr.push(opt); item.classList.add('selected'); }
+        } else {
+          answers[f.key] = opt;
+          list.querySelectorAll('.choice-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+        }
+        updateFollowUp(f, group);
+      });
+      list.appendChild(item);
+    });
+
+    if (f.allowOther) {
+      const otherKey = f.key;
+      const item = el('div', { class: 'choice-item' + (isMulti ? '' : ' single') });
+      const mark = el('div', { class: 'choice-mark' }, [el('svg', { viewBox: '0 0 12 12', fill: 'none' }, [])]);
+      mark.querySelector('svg').innerHTML = '<path d="M2 6L4.5 8.5L10 3" stroke="#06231A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+      const isOtherSelected = isMulti ? answers[otherKey].includes('Outro') : answers[otherKey] === 'Outro';
+      if (isOtherSelected) item.classList.add('selected');
+      item.appendChild(mark);
+      item.appendChild(el('div', { class: 'choice-label' }, [document.createTextNode('Outro')]));
+      item.addEventListener('click', () => {
+        if (isMulti) {
+          const arr = answers[otherKey];
+          const i = arr.indexOf('Outro');
+          if (i >= 0) { arr.splice(i, 1); item.classList.remove('selected'); }
+          else { arr.push('Outro'); item.classList.add('selected'); }
+        } else {
+          answers[otherKey] = 'Outro';
+          list.querySelectorAll('.choice-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+        }
+        updateFollowUp(f, group);
+      });
+      list.appendChild(item);
+    }
+
+    group.appendChild(list);
+
+    if (f.allowOther) {
+      const fu = el('div', { class: 'choice-extra-input', id: 'fu-other-' + f.key });
+      const fuInput = el('input', { type: 'text', placeholder: f.otherLabel || 'Detalhe', 'data-key': f.key + '_outro_detalhe' });
+      fuInput.value = answers[f.key + '_outro_detalhe'] || '';
+      fuInput.addEventListener('input', e => { answers[f.key + '_outro_detalhe'] = e.target.value; });
+      fu.appendChild(fuInput);
+      group.appendChild(fu);
+    }
+    if (f.followUpOn) {
+      const fu = el('div', { class: 'choice-extra-input', id: 'fu-on-' + f.key });
+      const fuInput = el('input', { type: 'text', placeholder: f.followUpLabel || 'Detalhe', 'data-key': f.key + '_detalhe' });
+      fuInput.value = answers[f.key + '_detalhe'] || '';
+      fuInput.addEventListener('input', e => { answers[f.key + '_detalhe'] = e.target.value; });
+      fu.appendChild(fuInput);
+      group.appendChild(fu);
+    }
+    if (f.allowOther || f.followUpOn) {
+      requestAnimationFrame(() => updateFollowUp(f, group));
+    }
+  }
+
+  if (f.type === 'fleet_table') {
+    const cats = ['Econômico', 'Intermediário', 'SUV', 'Pickup', 'Utilitário', 'Outro'];
+    if (!answers.frota_tabela) answers.frota_tabela = {};
+    const table = el('div', { class: 'fleet-table' });
+    table.appendChild(el('div', { class: 'fleet-row head' }, [
+      el('div', {}, [document.createTextNode('Categoria')]),
+      el('div', {}, [document.createTextNode('Modelo')]),
+      el('div', {}, [document.createTextNode('Qtd.')]),
+      el('div', {}, [document.createTextNode('Diária R$')]),
+    ]));
+    cats.forEach(cat => {
+      if (!answers.frota_tabela[cat]) answers.frota_tabela[cat] = { modelo: '', qtd: '', diaria: '' };
+      const row = el('div', { class: 'fleet-row' });
+      row.appendChild(el('div', { class: 'fleet-cat' }, [document.createTextNode(cat)]));
+      ['modelo', 'qtd', 'diaria'].forEach(field => {
+        const inp = el('input', { type: 'text', placeholder: field === 'modelo' ? 'ex: Onix' : field === 'qtd' ? '0' : '0,00' });
+        inp.value = answers.frota_tabela[cat][field];
+        inp.addEventListener('input', e => { answers.frota_tabela[cat][field] = e.target.value; });
+        row.appendChild(inp);
+      });
+      table.appendChild(row);
+    });
+    group.appendChild(table);
+  }
+
+  if (f.type === 'slider') {
+    if (answers.comprometimento === undefined) answers.comprometimento = 7;
+    const wrap = el('div', { class: 'slider-wrap' });
+    const slider = el('input', { type: 'range', min: '0', max: '10', step: '1', value: String(answers.comprometimento) });
+    const readout = el('div', { class: 'slider-readout' }, [
+      el('span', {}, [document.createTextNode('0 — pouco comprometido')]),
+      el('span', { class: 'val', id: 'slider-val' }, [document.createTextNode(String(answers.comprometimento))]),
+      el('span', {}, [document.createTextNode('10 — total prioridade')]),
+    ]);
+    slider.addEventListener('input', e => {
+      answers.comprometimento = parseInt(e.target.value, 10);
+      document.getElementById('slider-val').textContent = e.target.value;
+    });
+    wrap.appendChild(slider);
+    wrap.appendChild(readout);
+    group.appendChild(wrap);
+  }
+
+  return group;
+}
+
+function updateFollowUp(f, group) {
+  if (f.allowOther) {
+    const fuOther = group.querySelector('#fu-other-' + f.key);
+    if (fuOther) {
+      const showOther = f.type === 'multi' ? answers[f.key].includes('Outro') : answers[f.key] === 'Outro';
+      fuOther.classList.toggle('visible', showOther);
+    }
+  }
+  if (f.followUpOn) {
+    const fuOn = group.querySelector('#fu-on-' + f.key);
+    if (fuOn) {
+      const showOn = f.type === 'multi'
+        ? f.followUpOn.some(o => answers[f.key].includes(o))
+        : f.followUpOn.includes(answers[f.key]);
+      fuOn.classList.toggle('visible', showOn);
+    }
+  }
+}
+
+function renderStep(idx) {
+  document.querySelectorAll('.step-block').forEach(b => b.classList.remove('active'));
+  document.getElementById('step-' + idx).classList.add('active');
+  document.getElementById('step-current').textContent = idx + 1;
+  const pct = ((idx) / (STEPS.length - 1)) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('btn-back').style.visibility = idx === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').textContent = idx === STEPS.length - 1 ? 'Enviar respostas →' : 'Continuar →';
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  saveProgress();
+}
+
+function goNext() {
+  if (currentStep === STEPS.length - 1) {
+    finishForm();
+    return;
+  }
+  currentStep++;
+  renderStep(currentStep);
+}
+
+function goBack() {
+  if (currentStep === 0) return;
+  currentStep--;
+  renderStep(currentStep);
+}
+
+let dbRowId = null;
+
+async function ensureClientId() {
+  if (clientId) return clientId;
+  const empresa = (answers.empresa || 'cliente').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  clientId = empresa + '-' + Date.now().toString(36);
+  return clientId;
+}
+
+async function saveProgress() {
+  try {
+    await ensureClientId();
+    const payload = {
+      cliente_id: clientId,
+      empresa: answers.empresa || '',
+      nome_completo: answers.nome_completo || '',
+      whatsapp: answers.whatsapp || '',
+      respostas: answers,
+      completo: false,
+      atualizado_em: new Date().toISOString(),
+    };
+
+    if (dbRowId) {
+      await supabaseClient.from('onboarding_respostas').update(payload).eq('id', dbRowId);
+    } else {
+      const { data, error } = await supabaseClient.from('onboarding_respostas').insert(payload).select('id').single();
+      if (error) throw error;
+      dbRowId = data.id;
+    }
+  } catch (e) {
+    console.error('Erro ao salvar progresso', e);
+  }
+}
+
+async function finishForm() {
+  document.getElementById('main').scrollTop = 0;
+  try {
+    await ensureClientId();
+    const payload = {
+      cliente_id: clientId,
+      empresa: answers.empresa || '',
+      nome_completo: answers.nome_completo || '',
+      whatsapp: answers.whatsapp || '',
+      respostas: answers,
+      completo: true,
+      atualizado_em: new Date().toISOString(),
+    };
+
+    if (dbRowId) {
+      const { error } = await supabaseClient.from('onboarding_respostas').update(payload).eq('id', dbRowId);
+      if (error) throw error;
+    } else {
+      const { error } = await supabaseClient.from('onboarding_respostas').insert(payload);
+      if (error) throw error;
+    }
+
+    document.getElementById('form-root').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+    document.getElementById('bottombar').style.display = 'none';
+    document.getElementById('done-screen').style.display = 'flex';
+  } catch (e) {
+    console.error('Erro ao salvar', e);
+    document.getElementById('form-root').style.display = 'none';
+    document.getElementById('topbar').style.display = 'none';
+    document.getElementById('bottombar').style.display = 'none';
+    document.getElementById('done-screen').style.display = 'flex';
+    document.getElementById('final-save-status').textContent = '⚠ Houve um erro ao salvar — tente enviar novamente.';
+    document.getElementById('final-save-status').className = 'save-status error';
+  }
+}
+</script>
+</body>
+</html>
