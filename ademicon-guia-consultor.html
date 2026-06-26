@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Consultor — Ademicon + Puulse</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080A0F;--bg2:#0D1018;--bg3:#111520;
+  --s:rgba(255,255,255,.03);--s2:rgba(255,255,255,.055);
+  --b:rgba(255,255,255,.07);--b2:rgba(255,255,255,.13);
+  --t:#F0F2F5;--t2:#8A9AB5;--t3:#4A5568;
+  --red:#C9252D;--rd:rgba(201,37,45,.09);--rm:rgba(201,37,45,.18);
+  --green:#22C55E;--amber:#F59E0B;
+  --sw:270px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:"Outfit",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+body::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.35;}
+
+/* SIDEBAR */
+.sb{position:fixed;top:0;left:0;bottom:0;width:var(--sw);background:var(--bg2);border-right:1px solid var(--b);display:flex;flex-direction:column;z-index:100;overflow-y:auto;}
+.sb::-webkit-scrollbar{width:3px}
+.sb::-webkit-scrollbar-thumb{background:var(--b2);border-radius:10px}
+.sb-logos{padding:22px 18px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--b);}
+.sb-ademicon{font-weight:800;font-size:17px;letter-spacing:-.03em;color:var(--t);}
+.sb-x{color:var(--t3);font-size:13px;font-weight:400;}
+.sb-puulse-mark{display:flex;align-items:center;gap:5px;}
+.sb-puulse-mark svg{width:18px;height:11px;}
+.sb-puulse-mark span{font-size:13px;font-weight:700;color:var(--t2);}
+.sb-int{padding:7px 16px;margin:8px 0 4px;background:rgba(201,37,45,.08);border-top:1px solid var(--rm);border-bottom:1px solid var(--rm);display:flex;align-items:center;gap:7px;font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;}
+.sb-int::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 5px var(--red);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.sb-lbl{padding:14px 18px 4px;font-family:"JetBrains Mono",monospace;font-size:8px;color:var(--t3);letter-spacing:.18em;text-transform:uppercase}
+.sb-nav{display:flex;flex-direction:column;gap:1px;padding:3px 8px 6px 14px}
+.sb-nav a{display:flex;align-items:center;gap:6px;padding:6px 10px;font-size:12.5px;color:var(--t2);text-decoration:none;border-radius:6px;transition:all .15s;cursor:pointer}
+.sb-nav a:hover{background:var(--s);color:var(--t)}
+.sb-nav a::before{content:"";width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;opacity:.5}
+.sb-ft{margin-top:auto;padding:14px 18px;border-top:1px solid var(--b);font-family:"JetBrains Mono",monospace;font-size:8px;color:var(--t3);line-height:1.7}
+
+/* MAIN */
+.main{margin-left:var(--sw);min-height:100vh}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(8,10,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--b);height:54px;padding:0 36px;display:flex;align-items:center;justify-content:space-between}
+.tb-l{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700}
+.tb-sep{color:var(--t3)}
+.tb-s{font-size:13px;color:var(--t2);font-weight:400}
+.tb-r{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;background:rgba(201,37,45,.09);border:1px solid var(--rm);border-radius:100px;font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--red)}
+.tb-r::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 5px var(--red);animation:blink 2s infinite}
+
+/* HERO */
+.hero{padding:50px 36px 36px;border-bottom:1px solid var(--b);position:relative;overflow:hidden}
+.hg{position:absolute;width:480px;height:380px;top:-80px;right:-60px;background:radial-gradient(circle,rgba(201,37,45,.07) 0%,transparent 65%);pointer-events:none}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,37,45,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(201,37,45,.018) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 70% 40%,black 20%,transparent 68%);pointer-events:none}
+.hero-badges{display:flex;align-items:center;gap:12px;margin-bottom:22px;position:relative;z-index:2;}
+.hbadge{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--s);border:1px solid var(--b2);border-radius:100px;}
+.hbadge .ademicon-n{font-weight:800;font-size:14px;color:var(--t);letter-spacing:-.02em;}
+.hbadge-x{color:var(--t3);font-size:14px;}
+.hbadge .puulse-n{font-weight:700;font-size:13px;color:var(--t2);}
+.hbadge svg{width:16px;height:10px;}
+.htag{display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:100px;background:var(--rd);border:1px solid var(--rm);font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;position:relative;z-index:2;}
+.hero h1{font-family:"DM Serif Display",serif;font-size:clamp(28px,3vw,42px);font-weight:400;line-height:1.08;letter-spacing:-.03em;margin-bottom:12px;position:relative;z-index:2;}
+.hero h1 em{font-style:italic;color:var(--red)}
+.hsub{font-size:14px;color:var(--t2);max-width:600px;line-height:1.65;margin-bottom:24px;position:relative;z-index:2;}
+.hrow{display:flex;gap:20px;flex-wrap:wrap;position:relative;z-index:2;}
+.hs{border-left:2px solid var(--red);padding-left:11px}
+.hs-n{font-family:"DM Serif Display",serif;font-size:22px;line-height:1}
+.hs-n span{color:var(--red);font-size:.65em}
+.hs-l{font-size:10px;color:var(--t3);margin-top:2px}
+
+/* CONTENT */
+.cnt{padding:36px}
+.sec{margin-bottom:44px}
+.sec:last-child{margin-bottom:0}
+.ey{display:inline-flex;align-items:center;gap:7px;font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--red);letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+.ey::before{content:"";width:16px;height:1px;background:var(--red)}
+.stit{font-family:"DM Serif Display",serif;font-size:clamp(19px,2vw,26px);font-weight:400;line-height:1.1;letter-spacing:-.022em;margin-bottom:8px}
+.stit em{font-style:italic;color:var(--red)}
+.sbdy{font-size:13.5px;color:var(--t2);line-height:1.65;max-width:680px;margin-bottom:20px}
+
+.box{padding:13px 16px;border-radius:10px;display:flex;align-items:flex-start;gap:11px;margin-bottom:16px;font-size:12.5px;line-height:1.55}
+.box svg{flex-shrink:0;margin-top:1px}
+.box strong{color:var(--t)}
+.box p{color:var(--t2);margin-top:3px}
+.box.green{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.18)}
+.box.red{background:var(--rd);border:1px solid var(--rm)}
+.box.amber{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18)}
+.box.blue{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.18)}
+
+.ex{background:rgba(255,255,255,.02);border:1px solid var(--b);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:13px 16px;margin:10px 0 18px;font-size:12.5px;color:var(--t2);line-height:1.6}
+.ex-l{font-family:"JetBrains Mono",monospace;font-size:8.5px;color:var(--red);letter-spacing:.14em;text-transform:uppercase;margin-bottom:5px}
+.ex strong{color:var(--t)}
+
+.script{background:rgba(0,0,0,.3);border:1px solid var(--b2);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:16px 20px;margin:14px 0;}
+.script-l{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--green);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px;}
+.script .tag{display:inline-block;padding:1px 7px;background:rgba(34,197,94,.1);border-radius:4px;font-size:10.5px;color:var(--green);font-family:"JetBrains Mono",monospace;margin-right:4px;}
+.script .msg{color:var(--t);line-height:1.6;margin-bottom:4px;}
+.script .note{font-size:11px;color:var(--t3);font-style:italic;}
+
+/* COPY-ABLE SCRIPT CARDS */
+.copy-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
+.copy-tab{padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--b);background:var(--s);color:var(--t2);transition:all .2s;}
+.copy-tab:hover{background:var(--s2);color:var(--t);}
+.copy-tab.active{background:var(--rd);border-color:var(--rm);color:var(--red);}
+.copy-group{display:none;}
+.copy-group.active{display:flex;flex-direction:column;gap:12px;}
+.copy-card{background:rgba(0,0,0,.28);border:1px solid var(--b2);border-left:3px solid var(--red);border-radius:0 12px 12px 0;padding:16px 18px;position:relative;}
+.copy-card-label{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--red);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.copy-card-text{color:var(--t);font-size:13.5px;line-height:1.65;padding-right:8px;}
+.copy-btn{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:var(--rd);border:1px solid var(--rm);color:var(--red);font-family:"Outfit",sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.copy-btn:hover{background:rgba(201,37,45,.22);}
+.copy-btn.copied{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35);color:var(--green);}
+.copy-btn svg{width:12px;height:12px;}
+
+.steps{display:flex;flex-direction:column;gap:0;position:relative}
+.steps::before{content:"";position:absolute;left:16px;top:24px;bottom:24px;width:1px;background:linear-gradient(180deg,var(--red),rgba(201,37,45,.06))}
+.step{display:flex;gap:16px;padding-bottom:20px;position:relative}
+.step:last-child{padding-bottom:0}
+.sc{width:32px;height:32px;border-radius:50%;background:var(--bg);border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--red);font-weight:600;flex-shrink:0;box-shadow:0 0 8px rgba(201,37,45,.15);z-index:1}
+.sb2{flex:1;padding-top:4px}
+.st{font-size:14px;font-weight:700;margin-bottom:4px}
+.sd{font-size:12.5px;color:var(--t2);line-height:1.6;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.chip{padding:2.5px 9px;border-radius:100px;font-size:10.5px;border:1px solid}
+.chip.gr{background:var(--s);border-color:var(--b);color:var(--t3)}
+.chip.rd{background:var(--rd);border-color:var(--rm);color:var(--red)}
+.chip.gn{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)}
+.chip.am{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2);color:var(--amber)}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cards.two{grid-template-columns:repeat(2,1fr)}
+.card{padding:18px;background:var(--s);border:1px solid var(--b);border-radius:11px;transition:all .3s}
+.card:hover{background:var(--s2);border-color:var(--rm);transform:translateY(-2px)}
+.ci{width:34px;height:34px;border-radius:7px;background:var(--rd);border:1px solid var(--rm);display:flex;align-items:center;justify-content:center;color:var(--red);margin-bottom:11px}
+.ci svg{width:15px;height:15px}
+.card h4{font-size:12.5px;font-weight:700;margin-bottom:4px}
+.card p{font-size:11.5px;color:var(--t3);line-height:1.5}
+
+.faq{display:flex;flex-direction:column;gap:7px}
+.fi{background:var(--s);border:1px solid var(--b);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.fi:hover{border-color:var(--rm)}
+.fq{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:13px 16px;cursor:pointer;font-size:13.5px;font-weight:600}
+.fq span{flex:1;line-height:1.4}
+.fi-ico{flex-shrink:0;width:19px;height:19px;border-radius:50%;background:var(--rd);border:1px solid var(--rm);display:flex;align-items:center;justify-content:center;color:var(--red);font-size:11px;transition:transform .25s;margin-top:1px}
+.fa{display:none;padding:0 16px 13px;font-size:12.5px;color:var(--t2);line-height:1.65;border-top:1px solid var(--b)}
+.fi.open .fa{display:block}
+.fi.open .fi-ico{transform:rotate(45deg)}
+
+.ktbl-w{border:1px solid var(--b);border-radius:11px;overflow:hidden;margin-top:4px}
+table.kt{width:100%;border-collapse:collapse}
+table.kt th{font-family:"JetBrains Mono",monospace;font-size:8.5px;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;padding:9px 14px;text-align:left;background:rgba(0,0,0,.18);border-bottom:1px solid var(--b)}
+table.kt td{padding:10px 14px;font-size:12.5px;border-bottom:1px solid rgba(255,255,255,.04)}
+table.kt tr:last-child td{border-bottom:none}
+table.kt tr:hover td{background:rgba(255,255,255,.015)}
+table.kt td.g{color:var(--green);font-weight:600}
+table.kt td.a{color:var(--amber)}
+table.kt td.d{color:var(--t3)}
+
+/* FLOW DIAGRAM (handoff visual) */
+.flow-diag{display:flex;align-items:center;gap:0;overflow-x:auto;padding:8px 0 16px;margin-bottom:8px;}
+.fn{padding:14px 18px;background:var(--bg3);border:1px solid var(--b);border-radius:10px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;text-align:center;}
+.fn.accent{background:var(--rd);border-color:var(--rm);color:var(--red);}
+.fn.green{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green);}
+.fn.amber{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2);color:var(--amber);}
+.fa-arrow{padding:0 10px;color:var(--t3);font-size:20px;flex-shrink:0;}
+
+/* WEEKLY FEEDBACK TEMPLATE */
+.feedback-template{background:var(--bg3);border:1px solid var(--b2);border-radius:14px;padding:24px 26px;margin-top:10px;}
+.ft-row{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.ft-row:last-child{border-bottom:none;}
+.ft-label{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--red);letter-spacing:.08em;text-transform:uppercase;width:170px;flex-shrink:0;padding-top:2px;}
+.ft-value{font-size:13px;color:var(--t2);flex:1;}
+.ft-value strong{color:var(--t);}
+
+.r{opacity:0;transform:translateY(13px);transition:opacity .5s,transform .5s}
+.r.v{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  :root{--sw:0px}
+  .main{margin-left:0}
+  .topbar,.hero,.cnt{padding-left:18px;padding-right:18px}
+  .cards,.cards.two{grid-template-columns:1fr}
+}
+/* LOGIN GATE */
+#loginGate{
+  position:fixed;inset:0;z-index:99999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+#loginGate::before{content:"";position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;}
+.login-glow{position:fixed;width:700px;height:700px;top:50%;left:50%;transform:translate(-50%,-55%);background:radial-gradient(circle,rgba(201,37,45,.08) 0%,transparent 65%);pointer-events:none;}
+.login-card{
+  position:relative;z-index:2;
+  width:100%;max-width:380px;
+  background:var(--bg2);border:1px solid var(--b2);
+  border-radius:20px;padding:36px 32px;
+  box-shadow:0 32px 80px rgba(0,0,0,.5);
+}
+.login-logos{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center;}
+.login-ademicon{font-weight:800;font-size:16px;color:var(--t);letter-spacing:-.02em;}
+.login-x{color:var(--t3);font-size:14px;}
+.login-puulse{display:flex;align-items:center;gap:5px;}
+.login-puulse svg{width:18px;height:11px;}
+.login-puulse span{font-size:13px;font-weight:700;color:var(--t2);}
+.login-title{font-family:"DM Serif Display",serif;font-size:22px;font-weight:400;text-align:center;color:var(--t);margin-bottom:6px;letter-spacing:-.02em;}
+.login-sub{font-size:12.5px;color:var(--t3);text-align:center;margin-bottom:26px;}
+.login-field{margin-bottom:14px;}
+.login-field label{display:block;font-size:11px;font-weight:600;color:var(--t2);margin-bottom:6px;}
+.login-field input{
+  width:100%;padding:11px 14px;
+  background:rgba(255,255,255,.04);border:1px solid var(--b2);
+  border-radius:9px;color:var(--t);font-family:"Outfit",sans-serif;font-size:14px;
+  outline:none;transition:all .2s;
+}
+.login-field input:focus{border-color:var(--rm);background:rgba(255,255,255,.06);}
+.login-field input.error{border-color:var(--red);}
+.login-btn{
+  width:100%;padding:12px;margin-top:4px;
+  background:var(--red);color:white;border:none;border-radius:9px;
+  font-family:"Outfit",sans-serif;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.login-btn:hover{background:#A8202E;}
+.login-err{
+  padding:9px 13px;background:var(--rd);border:1px solid var(--rm);
+  border-radius:8px;font-size:12px;color:var(--red);margin-bottom:14px;display:none;
+}
+.login-err.show{display:block;}
+
+.login-quote-wrap{
+  position:relative;z-index:2;text-align:center;
+  margin-bottom:32px;max-width:480px;
+}
+.login-quote-mark{display:none;}
+.login-quote{
+  font-family:"DM Serif Display",serif;font-style:italic;font-size:21px;
+  color:#C9D2E0;line-height:1.4;letter-spacing:-.01em;
+}
+.login-quote .atitude-destaque{
+  display:block;
+  font-style:italic;font-weight:700;font-size:1.7em;
+  color:#E8303A;line-height:1.15;margin-top:6px;
+  letter-spacing:-.015em;
+}
+.login-wrap-outer{display:flex;flex-direction:column;align-items:center;}
+.login-nto-credit{
+  display:flex;flex-direction:row;align-items:center;gap:14px;
+  margin-top:26px;
+}
+.login-nto-text{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--t2);letter-spacing:.1em;text-transform:uppercase;font-weight:600;}
+.login-nto-credit svg{opacity:.9;}
+
+/* PAGE FOOTER - NTO CREDIT */
+.page-footer{
+  padding:36px;border-top:1px solid var(--b);
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  background:var(--bg2);
+}
+.page-footer-text{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;}
+.page-footer-logo{display:flex;align-items:center;gap:8px;}
+.page-footer-logo svg{opacity:.85;}
+#siteContent{display:none;}
+#siteContent.unlocked{display:block;}
+</style></head><body>
+
+<!-- LOGIN GATE -->
+<div id="loginGate">
+  <div class="login-glow"></div>
+  <div class="login-wrap-outer">
+    <div class="login-quote-wrap">
+      <div class="login-quote">O único passo entre o sonho e a realidade é a<span class="atitude-destaque">atitude.</span></div>
+    </div>
+    <div class="login-card">
+      <div class="login-logos">
+        <svg width="92" height="21" viewBox="0 0 366 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M278.894 46.9177C278.894 47.2742 278.966 47.6307 279.049 47.9872C279.465 49.7696 280.724 50.744 282.376 51.1481C284.468 51.659 286.547 51.5164 288.472 50.4351C289.316 49.9598 290.171 49.5201 291.146 49.3894C291.93 49.2943 292.726 49.2468 293.511 49.4369C294.948 49.7815 295.935 50.9936 296.03 52.4671C296.101 53.6554 295.721 54.7011 294.996 55.628C294.271 56.5549 293.356 57.2322 292.322 57.7669C290.54 58.6819 288.65 59.2048 286.666 59.4424C284.373 59.7158 282.091 59.6563 279.857 59.1097C276.553 58.3017 273.773 56.6618 271.753 53.8812C270.457 52.1106 269.733 50.1024 269.435 47.9396C269.34 47.2385 269.305 46.5374 269.293 45.8363C269.281 42.8418 269.293 39.8472 269.293 36.8646C269.293 34.7138 269.709 32.658 270.624 30.721C271.99 27.8216 274.224 25.8133 277.1 24.4943C279.037 23.615 281.081 23.1991 283.196 23.0921C285.644 22.9852 288.033 23.2466 290.362 24.0546C291.407 24.4111 292.405 24.8864 293.309 25.5044C294.01 25.9797 294.64 26.5501 295.127 27.2393C295.709 28.0355 296.042 28.9267 296.042 29.9249C296.042 31.6836 294.913 33.062 293.19 33.4066C292.013 33.6324 290.861 33.4779 289.744 33.0501C289.221 32.8481 288.71 32.5867 288.211 32.3134C286.856 31.5529 285.418 31.1845 283.862 31.2558C283.065 31.3033 282.293 31.4459 281.568 31.7786C279.916 32.5154 279.049 33.7869 278.894 35.5693C278.859 36.0209 278.871 45.0639 278.894 46.9177Z" fill="white"/>
+<path d="M233.374 38.443C233.541 38.1578 233.647 37.9677 233.754 37.7775C235.977 33.8205 238.175 29.8515 240.409 25.9064C241.431 24.1001 243.011 23.1613 245.067 23.0306C246.149 22.9593 247.23 23.0069 248.299 23.2327C249 23.3753 249.63 23.6723 250.201 24.1239C251.151 24.8963 251.65 25.8707 251.65 27.1184C251.65 32.8817 251.65 38.6331 251.65 44.3964C251.65 48.0327 251.65 51.657 251.65 55.2813C251.65 57.349 250.593 58.7631 248.596 59.3335C247.396 59.6781 246.184 59.69 244.984 59.3097C244.414 59.1315 243.914 58.8463 243.463 58.4541C242.572 57.6936 242.12 56.7429 242.12 55.5665C242.12 52.572 242.12 49.5893 242.12 46.5948V40.2611L242.025 40.2255C241.942 40.3562 241.847 40.4869 241.776 40.6295C240.694 42.6259 239.601 44.6103 238.543 46.6186C238.032 47.5692 237.331 48.3297 236.464 48.9477C234.765 50.136 232.067 50.1478 230.368 48.9595C229.429 48.306 228.657 47.486 228.122 46.4522C227.112 44.5153 226.054 42.6021 225.032 40.677C224.949 40.5344 224.866 40.3918 224.676 40.2492C224.676 40.4275 224.664 40.5938 224.664 40.7721C224.664 45.6085 224.593 50.4449 224.688 55.2694C224.735 57.7174 222.905 59.179 221.099 59.4761C219.97 59.6662 218.865 59.5949 217.795 59.1909C217.118 58.9413 216.548 58.5492 216.061 58.0263C215.454 57.3846 215.134 56.6241 215.11 55.7448C215.11 55.5903 215.11 55.4358 215.11 55.2813V27.3798C215.11 25.3241 216.167 23.8981 218.152 23.304C219.245 22.9712 220.362 23.0069 221.479 23.0663C222.24 23.1019 222.976 23.2208 223.689 23.5178C224.83 23.9813 225.71 24.7299 226.316 25.8113C228.55 29.8159 230.796 33.8205 233.041 37.8251C233.137 38.0033 233.255 38.1816 233.398 38.4311" fill="white"/>
+<path d="M356.446 42.091V27.356C356.446 25.2883 357.539 23.8386 359.547 23.2801C360.736 22.9474 361.924 22.9474 363.112 23.3157C363.968 23.5891 364.681 24.1 365.239 24.8011C365.715 25.4072 365.941 26.0964 365.976 26.8569C365.976 26.9995 365.976 27.1302 365.976 27.2728C365.976 36.6129 365.941 45.9411 366 55.2812C366.012 57.741 364.194 59.1908 362.387 59.4879C361.413 59.6542 360.439 59.5948 359.476 59.3215C358.359 59.0006 357.468 58.3827 356.862 57.3608C356.743 57.1706 356.612 56.9924 356.47 56.8142C352.418 51.5975 348.365 46.3808 344.325 41.176C344.218 41.0453 344.111 40.9265 343.909 40.6888C343.897 41.0097 343.885 41.1998 343.885 41.3899C343.885 46.0124 343.826 50.635 343.909 55.2694C343.957 57.7767 342.044 59.2264 340.202 59.4997C339.215 59.6423 338.253 59.5948 337.29 59.2977C336.577 59.0838 335.948 58.7036 335.401 58.1807C334.688 57.4915 334.308 56.6597 334.32 55.6496C334.32 52.7264 334.32 49.8031 334.32 46.8799V27.3798C334.32 25.2765 335.365 23.8861 337.385 23.292C338.431 22.983 339.489 22.9474 340.546 23.2088C341.901 23.5415 342.947 24.2902 343.588 25.5498C343.672 25.7161 343.779 25.8706 343.897 26.0251C347.938 31.2655 351.978 36.506 356.03 41.7583C356.125 41.8771 356.22 41.996 356.327 42.1148C356.363 42.1148 356.41 42.1029 356.458 42.091" fill="white"/>
+<path d="M330.243 45.443C330.266 42.8287 330.243 40.2144 330.255 37.6001C330.255 36.4594 330.148 35.3305 329.922 34.2253C329.221 30.7436 327.51 27.8917 324.551 25.8596C322.744 24.6238 320.736 23.8395 318.574 23.4355C316.565 23.0671 314.545 22.9839 312.513 23.1147C310.719 23.2335 308.96 23.5306 307.273 24.1604C304.076 25.3487 301.557 27.345 299.965 30.4109C298.99 32.2884 298.467 34.2966 298.384 36.3999C298.313 38.0279 298.325 43.708 298.325 44.9082C298.325 46.1203 298.432 47.3086 298.669 48.4969C299.466 52.3233 301.438 55.3416 304.849 57.3379C306.607 58.3718 308.497 59.0016 310.505 59.3105C312.347 59.5957 314.201 59.6551 316.054 59.5244C318.11 59.3818 320.106 58.9897 322.008 58.1697C325.216 56.7794 327.628 54.5692 329.019 51.3251C329.815 49.4476 330.207 47.4869 330.231 45.4549M320.665 41.3314V45.3004C320.665 46.1322 320.558 46.9402 320.344 47.7483C319.976 49.1267 319.132 50.0655 317.825 50.6121C316.91 50.9924 315.959 51.1825 314.973 51.2181C313.678 51.2776 312.394 51.2181 311.158 50.7903C309.34 50.1843 308.247 48.9604 307.95 47.0591C307.843 46.3817 307.772 45.6925 307.76 45.0152C307.736 42.5791 307.748 40.1312 307.76 37.6952C307.76 36.7446 307.867 35.8058 308.14 34.9027C308.485 33.7381 309.198 32.8826 310.279 32.3122C311.194 31.8368 312.18 31.6111 313.19 31.516C314.533 31.3972 315.876 31.4685 317.171 31.8606C317.468 31.9438 317.754 32.0626 318.039 32.1933C319.239 32.74 320.035 33.6431 320.356 34.9264C320.522 35.6275 320.653 36.3405 320.677 37.0535C320.724 38.4795 320.689 39.9055 320.689 41.3314" fill="white"/>
+<path d="M154.717 41.2954V27.7843C154.717 25.8473 155.727 24.4333 157.581 23.8629C158.211 23.6727 158.9 23.5777 159.566 23.5658C162.156 23.5302 164.759 23.5302 167.361 23.5658C170.118 23.6014 172.803 24.0292 175.334 25.1819C178.448 26.6198 180.824 28.8062 182.239 31.9671C182.999 33.6664 183.474 35.4489 183.522 37.3026C183.605 39.8932 183.617 42.4956 183.593 45.0861C183.569 46.9874 183.189 48.8411 182.441 50.5998C181.003 53.9984 178.46 56.2562 175.085 57.6465C173.112 58.4664 171.045 58.9298 168.918 58.9774C165.733 59.0606 162.56 59.0487 159.375 59.0606C158.686 59.0606 158.009 58.9417 157.355 58.6803C156.702 58.4308 156.143 58.0505 155.656 57.5395C155.05 56.886 154.717 56.1136 154.717 55.2104C154.717 54.0934 154.717 52.9764 154.717 51.8594V41.2835V41.2954ZM164.283 50.7662C164.402 50.7899 164.461 50.8256 164.521 50.8256C165.828 50.8018 167.135 50.8256 168.442 50.7424C169.524 50.6711 170.581 50.374 171.532 49.8393C172.768 49.1382 173.576 48.1162 173.849 46.714C173.956 46.1437 174.027 45.5614 174.027 44.9791C174.051 42.8639 174.039 40.7487 174.027 38.6454C174.027 38.0988 174.004 37.5403 173.932 37.0056C173.635 34.8191 172.494 33.2624 170.427 32.4068C169.678 32.0978 168.882 31.9077 168.074 31.884C166.921 31.8364 165.769 31.8483 164.616 31.8364C164.509 31.8364 164.39 31.8721 164.259 31.9077V50.7781L164.283 50.7662Z" fill="white"/>
+<path d="M196.404 31.8126V36.9461C196.618 36.958 196.82 36.9818 197.022 36.9818C199.066 36.9818 201.11 36.9699 203.166 36.9936C203.855 36.9936 204.556 37.0293 205.21 37.1838C206.743 37.5284 207.812 38.4434 208.204 39.9882C208.596 41.5211 208.323 42.9233 207.135 44.0641C206.446 44.7177 205.602 45.0385 204.687 45.1573C204.224 45.2167 203.76 45.2405 203.297 45.2405C201.217 45.2405 199.138 45.2405 197.058 45.2405H196.428V50.7661C196.642 50.778 196.856 50.8137 197.07 50.8137C200.564 50.8137 204.057 50.8137 207.539 50.8137C208.157 50.8137 208.787 50.8374 209.381 50.98C210.902 51.3246 211.983 52.2159 212.399 53.7607C212.815 55.2936 212.53 56.6958 211.365 57.8484C210.712 58.502 209.88 58.8347 208.977 58.9655C208.549 59.0368 208.121 59.0605 207.693 59.0605C202.417 59.0605 197.129 59.0605 191.853 59.0605C191.057 59.0605 190.285 58.9655 189.524 58.6803C188.906 58.4426 188.36 58.0861 187.884 57.6227C187.207 56.9572 186.85 56.1373 186.827 55.1866C186.827 55.0084 186.827 54.842 186.827 54.6757V27.9625C186.827 25.574 188.3 23.9222 190.701 23.6252C191.14 23.5776 191.592 23.542 192.031 23.542C197.248 23.542 202.453 23.542 207.67 23.542C208.299 23.542 208.953 23.6014 209.559 23.7559C211.472 24.2431 212.613 25.8235 212.565 27.8437C212.518 29.6855 211.27 31.2066 209.393 31.5987C208.775 31.7294 208.133 31.7651 207.503 31.7651C204.045 31.777 200.587 31.7651 197.129 31.7651H196.404V31.8126Z" fill="white"/>
+<path d="M141.719 51.8941H131.202C131.131 52.0486 131.071 52.203 131.012 52.3575C130.513 53.7478 130.002 55.1381 129.527 56.5285C128.909 58.3703 127.518 59.2141 125.712 59.4755C124.524 59.6419 123.383 59.3923 122.314 58.8576C121.292 58.3466 120.555 57.5504 120.175 56.4572C119.901 55.6729 119.961 54.9124 120.27 54.14C122.064 49.6601 123.847 45.1682 125.641 40.6883C127.554 35.8994 129.479 31.1224 131.357 26.3217C131.986 24.7056 133.127 23.7312 134.755 23.2796C136.502 22.8043 138.201 22.9706 139.77 23.9451C140.649 24.4917 141.255 25.2403 141.636 26.2147C145.236 35.4479 148.86 44.681 152.473 53.9142C153.15 55.661 152.711 57.3841 151.166 58.4179C149.371 59.6181 147.446 59.8676 145.438 58.9407C144.44 58.4773 143.751 57.7287 143.406 56.6592C142.931 55.2451 142.42 53.8429 141.933 52.4288C141.873 52.2506 141.802 52.0842 141.731 51.8941M138.95 44.0037C138.142 41.6984 137.369 39.4406 136.502 37.2066C135.635 39.4644 134.815 41.7103 134.007 44.0037H138.938H138.95Z" fill="white"/>
+<path d="M265.242 41.3191C265.242 46.0248 265.23 50.7424 265.242 55.4481C265.242 56.8385 264.659 57.8485 263.578 58.6328C262.924 59.1081 262.176 59.3814 261.38 59.4765C260.381 59.5953 259.395 59.5359 258.433 59.2032C257.684 58.9418 257.054 58.514 256.531 57.9198C255.961 57.2781 255.676 56.5176 255.676 55.662V26.9525C255.676 26.0494 255.997 25.277 256.603 24.6115C257.328 23.8154 258.231 23.3638 259.276 23.1737C260.179 23.0073 261.083 23.0073 261.986 23.245C262.853 23.4589 263.614 23.8867 264.232 24.5402C264.885 25.2295 265.23 26.0375 265.23 27C265.23 31.777 265.23 36.554 265.23 41.331" fill="white"/>
+<path d="M102.87 40.7526C102.8 40.6753 102.743 40.5876 102.677 40.5155L70.4362 4.01031C67.2605 0.113402 62.5135 0.00515464 61.7984 0H39.2113C36.7743 0.0515464 34.4126 1.05155 34.1444 1.14433C30.7382 2.37629 28.0848 5.93814 27.8778 6.18557C27.8402 6.23196 27.7978 6.28351 27.7602 6.3299L1.73871 40.7474C1.69637 40.8041 1.65873 40.8608 1.61639 40.9175C-1.4981 45.2938 0.788367 51.2835 1.11299 52.1392L9.16266 73.3454C9.23323 73.5258 9.30851 73.701 9.4026 73.866C12.0184 78.6753 16.5725 81.7165 21.5783 81.9948C21.6441 81.9948 21.7053 82 21.7665 82H37.767C40.2652 82 41.8083 80.8557 42.6646 79.8918C44.3441 78.0052 44.4664 75.6443 44.4664 74.9691V54.9175C44.4147 50.3041 41.1638 47.8041 38.1199 47.7938H35.8475L51.5893 27.3557L67.3217 47.7938H66.4701C63.4356 47.8041 60.1847 50.299 60.133 54.9175V74.9691C60.133 75.6443 60.26 78.0052 61.9348 79.8918C62.7911 80.8505 64.3342 82 66.8324 82H83.1717C83.2752 82 83.374 82 83.4775 81.9845C88.2904 81.5515 92.6704 78.5206 95.1921 73.8866C95.2815 73.7217 95.3615 73.5464 95.432 73.366L103.491 52.1392C103.825 51.2577 107.067 45.299 102.87 40.7526ZM38.1246 51.8711C38.1246 51.8711 40.7168 51.8763 40.7545 54.9639V74.9691C40.7545 74.9691 40.8203 77.9227 37.7717 77.9227H21.7712C17.8804 77.7062 14.5119 75.299 12.5971 71.7732L4.5521 50.5722C5.9729 51.3093 8.14646 51.8814 11.4821 51.8814H38.1246V51.8711ZM30.6912 47.7062H8.68279C8.68279 47.7062 1.25413 47.9794 5.52126 41.6856L29.8208 9.98454C29.8208 9.98454 34.0315 4.92268 39.7241 11.6031L49.3122 24.0155L30.6912 47.7165V47.7062ZM42.3964 9.09278C42.3964 9.09278 39.5077 5.08763 35.49 4.9433C35.49 4.9433 37.433 4.1134 39.2819 4.07732H61.8125C61.8125 4.07732 65.5057 4.02062 67.7075 6.77835L98.7159 41.6959C103.124 47.5361 95.0651 47.7165 95.0651 47.7165H72.1157L42.3964 9.09278ZM91.9976 71.8041C90.1393 75.2217 86.9119 77.5876 83.1717 77.9278H66.8324C63.7838 77.9278 63.8497 74.9742 63.8497 74.9742V54.9691C63.8826 51.8814 66.4796 51.8763 66.4796 51.8763H93.1221C96.4577 51.8814 98.6359 51.3144 100.052 50.5773L91.9929 71.8041H91.9976Z" fill="white"/>
+</svg>
+        <span class="login-x">×</span>
+        <div class="login-puulse">
+          <svg viewBox="0 0 100 64" fill="none" stroke="#C9252D" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M5 32 L30 6 L82 6 L60 28 L95 28 L70 58 L18 58 L40 36 L5 36 Z"/></svg>
+          <span>puulse</span>
+        </div>
+      </div>
+      <div class="login-title">Acesso Restrito</div>
+      <div class="login-sub">Guia do Consultor · Insira o código e a senha</div>
+
+    <div class="login-err" id="loginErr">Código ou senha incorretos.</div>
+
+    <div class="login-field">
+      <label>Código</label>
+      <input type="text" id="loginCode" placeholder="Digite o código" autocomplete="off" onkeydown="if(event.key==='Enter')checkLogin()"/>
+    </div>
+    <div class="login-field">
+      <label>Senha</label>
+      <input type="password" id="loginPass" placeholder="Digite a senha" onkeydown="if(event.key==='Enter')checkLogin()"/>
+    </div>
+    <button class="login-btn" onclick="checkLogin()">Entrar</button>
+    </div>
+    <div class="login-nto-credit">
+      <span class="login-nto-text">Criação de</span>
+      <svg width="100" height="54" viewBox="0 0 189 102" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M142.808 32.0867C142.808 32.1752 142.796 32.3643 142.772 32.6539H137.595C137.691 33.2413 137.933 33.7079 138.319 34.0539C138.705 34.3998 139.236 34.5728 139.912 34.5728C140.29 34.5728 140.684 34.5044 141.095 34.3677C141.513 34.2309 141.879 34.0539 142.193 33.8366L142.652 34.6694C142.322 34.9268 141.907 35.1441 141.408 35.3211C140.91 35.49 140.403 35.5745 139.888 35.5745C139.115 35.5745 138.464 35.4056 137.933 35.0676C137.402 34.7297 137.024 34.3154 136.798 33.8246C136.573 33.3257 136.46 32.7786 136.46 32.1833C136.46 31.2097 136.762 30.4052 137.365 29.7695C137.969 29.1339 138.749 28.8161 139.707 28.8161C140.616 28.8161 141.36 29.1098 141.939 29.6971C142.519 30.2845 142.808 31.081 142.808 32.0867ZM141.071 30.3126C140.708 29.9667 140.254 29.7937 139.707 29.7937C139.16 29.7937 138.693 29.9707 138.307 30.3247C137.921 30.6707 137.683 31.1252 137.595 31.6884H141.674C141.642 31.1172 141.441 30.6586 141.071 30.3126ZM144.925 26.2938V35.4297H143.851V26.2938H144.925ZM152.35 32.0867C152.35 32.1752 152.338 32.3643 152.313 32.6539H147.136C147.233 33.2413 147.474 33.7079 147.86 34.0539C148.246 34.3998 148.777 34.5728 149.453 34.5728C149.831 34.5728 150.226 34.5044 150.636 34.3677C151.054 34.2309 151.42 34.0539 151.734 33.8366L152.193 34.6694C151.863 34.9268 151.448 35.1441 150.95 35.3211C150.451 35.49 149.944 35.5745 149.429 35.5745C148.657 35.5745 148.005 35.4056 147.474 35.0676C146.943 34.7297 146.565 34.3154 146.339 33.8246C146.114 33.3257 146.002 32.7786 146.002 32.1833C146.002 31.2097 146.303 30.4052 146.907 29.7695C147.51 29.1339 148.291 28.8161 149.248 28.8161C150.157 28.8161 150.901 29.1098 151.481 29.6971C152.06 30.2845 152.35 31.081 152.35 32.0867ZM150.612 30.3126C150.25 29.9667 149.795 29.7937 149.248 29.7937C148.701 29.7937 148.234 29.9707 147.848 30.3247C147.462 30.6707 147.225 31.1252 147.136 31.6884H151.215C151.183 31.1172 150.982 30.6586 150.612 30.3126ZM155.583 33.897L157.598 28.973H158.781L155.933 35.4176H155.209L152.361 28.973H153.555L155.583 33.897ZM164.358 29.9264V28.973H165.396V35.4297H164.358V34.5004C163.771 35.2245 163.003 35.5866 162.053 35.5866C161.12 35.5866 160.348 35.2607 159.736 34.609C159.125 33.9493 158.819 33.1326 158.819 32.1591C158.819 31.1856 159.125 30.3891 159.736 29.7695C160.348 29.1339 161.12 28.8161 162.053 28.8161C162.995 28.8161 163.763 29.1862 164.358 29.9264ZM164.443 32.1953C164.443 31.5356 164.23 30.9724 163.803 30.5057C163.385 30.0391 162.838 29.8058 162.162 29.8058C161.486 29.8058 160.939 30.0391 160.521 30.5057C160.11 30.9643 159.905 31.5316 159.905 32.2074C159.905 32.8752 160.11 33.4424 160.521 33.9091C160.947 34.3677 161.494 34.597 162.162 34.597C162.83 34.597 163.377 34.3677 163.803 33.9091C164.23 33.4344 164.443 32.8631 164.443 32.1953ZM170.587 34.2108L171.009 35.0435C170.551 35.4056 169.987 35.5866 169.32 35.5866C168.652 35.5866 168.145 35.3814 167.799 34.9711C167.453 34.5527 167.28 33.9573 167.28 33.1849V29.9023H166.133V28.973H167.292V26.6921H168.354V28.973H170.659V29.9023H168.354V33.2936C168.354 34.1625 168.708 34.597 169.416 34.597C169.778 34.597 170.168 34.4682 170.587 34.2108ZM172.154 28.0317C171.921 28.0317 171.728 27.9552 171.575 27.8024C171.422 27.6495 171.346 27.4604 171.346 27.2352C171.346 27.0099 171.422 26.8248 171.575 26.68C171.728 26.5271 171.921 26.4507 172.154 26.4507C172.371 26.4507 172.556 26.5271 172.709 26.68C172.862 26.8248 172.939 27.0099 172.939 27.2352C172.939 27.4604 172.862 27.6495 172.709 27.8024C172.556 27.9552 172.371 28.0317 172.154 28.0317ZM172.673 28.973V35.4297H171.599V28.973H172.673ZM175.222 35.4297H174.148V28.973H175.198V29.8902C175.608 29.1661 176.292 28.8041 177.25 28.8041C177.974 28.8041 178.581 29.0374 179.072 29.504C179.563 29.9707 179.808 30.6425 179.808 31.5195V35.4297H178.734V31.8333C178.734 31.1896 178.581 30.6908 178.275 30.3368C177.97 29.9828 177.559 29.8058 177.044 29.8058C176.505 29.8058 176.067 29.9948 175.729 30.373C175.391 30.7511 175.222 31.2379 175.222 31.8333V35.4297ZM186.328 29.8178V28.973H187.402V34.7659C187.402 35.8038 187.089 36.6325 186.461 37.252C185.85 37.8635 185.017 38.1692 183.963 38.1692C182.909 38.1692 181.968 37.8675 181.139 37.2641L181.658 36.4072C182.366 36.9302 183.134 37.1917 183.963 37.1917C184.687 37.1917 185.258 36.9825 185.677 36.5641C186.111 36.1538 186.328 35.6188 186.328 34.959V34.428C185.749 35.1038 184.985 35.4418 184.035 35.4418C183.102 35.4418 182.33 35.124 181.718 34.4883C181.099 33.8447 180.789 33.0562 180.789 32.1229C180.789 31.1896 181.107 30.4052 181.742 29.7695C182.378 29.1339 183.158 28.8161 184.084 28.8161C185.009 28.8161 185.757 29.15 186.328 29.8178ZM184.144 29.7937C183.476 29.7937 182.933 30.0149 182.515 30.4575C182.088 30.908 181.875 31.4632 181.875 32.1229C181.875 32.7907 182.088 33.3499 182.515 33.8004C182.949 34.2429 183.492 34.4642 184.144 34.4642C184.804 34.4642 185.343 34.2429 185.761 33.8004C186.196 33.3579 186.413 32.7987 186.413 32.1229C186.413 31.4632 186.196 30.908 185.761 30.4575C185.343 30.0149 184.804 29.7937 184.144 29.7937ZM142.808 51.0867C142.808 51.1752 142.796 51.3643 142.772 51.6539H137.595C137.691 52.2413 137.933 52.7079 138.319 53.0539C138.705 53.3998 139.236 53.5728 139.912 53.5728C140.29 53.5728 140.684 53.5044 141.095 53.3677C141.513 53.2309 141.879 53.0539 142.193 52.8366L142.652 53.6694C142.322 53.9268 141.907 54.1441 141.408 54.3211C140.91 54.49 140.403 54.5745 139.888 54.5745C139.115 54.5745 138.464 54.4056 137.933 54.0676C137.402 53.7297 137.024 53.3154 136.798 52.8246C136.573 52.3257 136.46 51.7786 136.46 51.1833C136.46 50.2097 136.762 49.4052 137.365 48.7695C137.969 48.1339 138.749 47.8161 139.707 47.8161C140.616 47.8161 141.36 48.1098 141.939 48.6971C142.519 49.2845 142.808 50.081 142.808 51.0867ZM141.071 49.3126C140.708 48.9667 140.254 48.7937 139.707 48.7937C139.16 48.7937 138.693 48.9707 138.307 49.3247C137.921 49.6707 137.683 50.1252 137.595 50.6884H141.674C141.642 50.1172 141.441 49.6586 141.071 49.3126ZM146.042 52.897L148.057 47.973H149.24L146.392 54.4176H145.668L142.819 47.973H144.014L146.042 52.897ZM155.638 51.0867C155.638 51.1752 155.626 51.3643 155.602 51.6539H150.424C150.521 52.2413 150.762 52.7079 151.148 53.0539C151.535 53.3998 152.066 53.5728 152.741 53.5728C153.12 53.5728 153.514 53.5044 153.924 53.3677C154.342 53.2309 154.709 53.0539 155.022 52.8366L155.481 53.6694C155.151 53.9268 154.737 54.1441 154.238 54.3211C153.739 54.49 153.232 54.5745 152.717 54.5745C151.945 54.5745 151.293 54.4056 150.762 54.0676C150.231 53.7297 149.853 53.3154 149.628 52.8246C149.402 52.3257 149.29 51.7786 149.29 51.1833C149.29 50.2097 149.591 49.4052 150.195 48.7695C150.798 48.1339 151.579 47.8161 152.536 47.8161C153.445 47.8161 154.19 48.1098 154.769 48.6971C155.348 49.2845 155.638 50.081 155.638 51.0867ZM153.9 49.3126C153.538 48.9667 153.083 48.7937 152.536 48.7937C151.989 48.7937 151.522 48.9707 151.136 49.3247C150.75 49.6707 150.513 50.1252 150.424 50.6884H154.503C154.471 50.1172 154.27 49.6586 153.9 49.3126ZM157.754 54.4297H156.68V47.973H157.694V48.9385C158.064 48.1822 158.688 47.8041 159.565 47.8041C159.79 47.8041 160.039 47.8362 160.313 47.9006L160.216 48.9506C159.983 48.8782 159.762 48.842 159.553 48.842C159.013 48.842 158.579 49.027 158.249 49.3971C157.919 49.7592 157.754 50.2781 157.754 50.954V54.4297ZM163.732 52.9211L165.506 47.973H166.701L163.973 55.2141C163.716 55.9061 163.41 56.4049 163.056 56.7106C162.71 57.0164 162.292 57.1692 161.801 57.1692C161.391 57.1692 161.057 57.0888 160.799 56.9279L160.92 55.9745C161.21 56.1032 161.471 56.1676 161.705 56.1676C162.244 56.1676 162.67 55.7854 162.984 55.021L163.237 54.3935L160.437 47.973H161.68L163.732 52.9211ZM144.257 66.8041C145.045 66.8041 145.669 67.0575 146.127 67.5644C146.586 68.0713 146.815 68.7511 146.815 69.604V73.4297H145.741V69.7609C145.741 69.1413 145.596 68.6626 145.307 68.3247C145.025 67.9787 144.639 67.8058 144.148 67.8058C143.625 67.8058 143.199 67.9908 142.869 68.3609C142.547 68.723 142.386 69.1977 142.386 69.785V73.4297H141.312V69.785C141.312 69.1655 141.167 68.6827 140.877 68.3368C140.596 67.9828 140.206 67.8058 139.707 67.8058C139.176 67.8058 138.745 67.9908 138.415 68.3609C138.094 68.723 137.933 69.2057 137.933 69.8091V73.4297H136.859V66.973H137.909V67.9264C138.102 67.5805 138.367 67.3069 138.705 67.1058C139.051 66.9046 139.433 66.8041 139.852 66.8041C140.294 66.8041 140.7 66.9127 141.071 67.1299C141.441 67.3391 141.718 67.6328 141.903 68.0109C142.12 67.6489 142.442 67.3592 142.869 67.142C143.295 66.9167 143.758 66.8041 144.257 66.8041ZM147.789 70.1953C147.789 69.2459 148.107 68.4494 148.743 67.8058C149.378 67.146 150.187 66.8161 151.169 66.8161C152.142 66.8161 152.947 67.146 153.582 67.8058C154.226 68.4655 154.548 69.262 154.548 70.1953C154.548 71.1608 154.23 71.9654 153.594 72.609C152.959 73.2607 152.15 73.5866 151.169 73.5866C150.187 73.5866 149.378 73.2607 148.743 72.609C148.107 71.9654 147.789 71.1608 147.789 70.1953ZM153.462 70.1953C153.462 69.5436 153.24 68.9844 152.798 68.5178C152.347 68.0431 151.804 67.8058 151.169 67.8058C150.533 67.8058 149.99 68.0431 149.539 68.5178C149.097 68.9844 148.876 69.5436 148.876 70.1953C148.876 70.8631 149.097 71.4303 149.539 71.897C149.982 72.3636 150.525 72.597 151.169 72.597C151.812 72.597 152.355 72.3636 152.798 71.897C153.24 71.4303 153.462 70.8631 153.462 70.1953ZM163.002 66.8041C163.791 66.8041 164.414 67.0575 164.873 67.5644C165.332 68.0713 165.561 68.7511 165.561 69.604V73.4297H164.487V69.7609C164.487 69.1413 164.342 68.6626 164.052 68.3247C163.771 67.9787 163.385 67.8058 162.894 67.8058C162.371 67.8058 161.944 67.9908 161.615 68.3609C161.293 68.723 161.132 69.1977 161.132 69.785V73.4297H160.058V69.785C160.058 69.1655 159.913 68.6827 159.623 68.3368C159.342 67.9828 158.951 67.8058 158.453 67.8058C157.922 67.8058 157.491 67.9908 157.161 68.3609C156.839 68.723 156.679 69.2057 156.679 69.8091V73.4297H155.604V66.973H156.654V67.9264C156.847 67.5805 157.113 67.3069 157.451 67.1058C157.797 66.9046 158.179 66.8041 158.597 66.8041C159.04 66.8041 159.446 66.9127 159.816 67.1299C160.186 67.3391 160.464 67.6328 160.649 68.0109C160.866 67.6489 161.188 67.3592 161.615 67.142C162.041 66.9167 162.504 66.8041 163.002 66.8041ZM172.895 70.0867C172.895 70.1752 172.883 70.3643 172.859 70.6539H167.682C167.778 71.2413 168.02 71.7079 168.406 72.0539C168.792 72.3998 169.323 72.5728 169.999 72.5728C170.377 72.5728 170.771 72.5044 171.182 72.3677C171.6 72.2309 171.966 72.0539 172.28 71.8366L172.738 72.6694C172.409 72.9268 171.994 73.1441 171.495 73.3211C170.997 73.49 170.49 73.5745 169.975 73.5745C169.202 73.5745 168.551 73.4056 168.02 73.0676C167.489 72.7297 167.11 72.3154 166.885 71.8246C166.66 71.3257 166.547 70.7786 166.547 70.1833C166.547 69.2097 166.849 68.4052 167.452 67.7695C168.056 67.1339 168.836 66.8161 169.794 66.8161C170.703 66.8161 171.447 67.1098 172.026 67.6971C172.606 68.2845 172.895 69.081 172.895 70.0867ZM171.157 68.3126C170.795 67.9667 170.341 67.7937 169.794 67.7937C169.247 67.7937 168.78 67.9707 168.394 68.3247C168.008 68.6707 167.77 69.1252 167.682 69.6884H171.761C171.729 69.1172 171.528 68.6586 171.157 68.3126ZM175.012 73.4297H173.938V66.973H174.988V67.8902C175.398 67.1661 176.082 66.8041 177.039 66.8041C177.763 66.8041 178.371 67.0374 178.862 67.504C179.353 67.9707 179.598 68.6425 179.598 69.5195V73.4297H178.524V69.8333C178.524 69.1896 178.371 68.6908 178.065 68.3368C177.759 67.9828 177.349 67.8058 176.834 67.8058C176.295 67.8058 175.857 67.9948 175.519 68.373C175.181 68.7511 175.012 69.2379 175.012 69.8333V73.4297ZM184.635 72.2108L185.058 73.0435C184.599 73.4056 184.036 73.5866 183.368 73.5866C182.7 73.5866 182.193 73.3814 181.847 72.9711C181.501 72.5527 181.329 71.9573 181.329 71.1849V67.9023H180.182V66.973H181.341V64.6921H182.403V66.973H184.708V67.9023H182.403V71.2936C182.403 72.1625 182.757 72.597 183.465 72.597C183.827 72.597 184.217 72.4682 184.635 72.2108ZM185.37 72.8745C185.37 72.6734 185.442 72.5044 185.587 72.3677C185.732 72.2228 185.909 72.1504 186.118 72.1504C186.327 72.1504 186.5 72.2228 186.637 72.3677C186.782 72.5044 186.854 72.6734 186.854 72.8745C186.854 73.0918 186.782 73.2728 186.637 73.4176C186.5 73.5544 186.327 73.6228 186.118 73.6228C185.909 73.6228 185.732 73.5544 185.587 73.4176C185.442 73.2728 185.37 73.0918 185.37 72.8745Z" fill="white"/>
+<path d="M40.6734 50.5791V71.9327H29.1184V50.9489C29.1184 47.9292 28.4406 45.4642 27.0848 43.5537C25.7906 41.6433 23.7878 40.6881 21.0762 40.6881C18.303 40.6881 16.331 41.6433 15.1601 43.5537C13.9892 45.4642 13.4037 47.9292 13.4037 50.9489V71.9327H1.84879V31.629H13.4037V33.94C14.5746 32.8924 15.8688 32.0912 17.2862 31.5366C18.7652 30.9203 20.4291 30.6122 22.2779 30.6122C25.1744 30.6122 27.7627 31.1052 30.0428 32.0912C32.323 33.0773 34.2334 34.4639 35.7741 36.251C37.3764 37.9766 38.5781 40.0718 39.3792 42.5369C40.242 44.9403 40.6734 47.6211 40.6734 50.5791ZM58.4615 41.9823V56.7726C58.4615 58.1284 58.9237 59.2685 59.8481 60.1928C60.8341 61.1172 62.005 61.5794 63.3608 61.5794H65.7642V71.9327H61.512C59.4783 71.9327 57.5679 71.5629 55.7807 70.8234C54.0552 70.0222 52.5145 68.9746 51.1588 67.6804C49.8646 66.3247 48.817 64.784 48.0158 63.0585C47.2763 61.2713 46.9065 59.3609 46.9065 57.3272V41.9823H39.7887V31.629H46.9065V21.4607H58.4615V31.629H65.7642V41.9823H58.4615ZM86.0785 30.6122C89.0366 30.6122 91.7789 31.1668 94.3056 32.2761C96.8939 33.3854 99.1433 34.8952 101.054 36.8057C103.026 38.7161 104.566 40.9654 105.676 43.5537C106.785 46.0804 107.34 48.8228 107.34 51.7808C107.34 54.7389 106.785 57.5121 105.676 60.1004C104.566 62.6271 103.026 64.8456 101.054 66.756C99.1433 68.6665 96.8939 70.1763 94.3056 71.2856C91.7789 72.3949 89.0366 72.9495 86.0785 72.9495C83.1821 72.9495 80.4397 72.3949 77.8514 71.2856C75.2631 70.1763 73.0137 68.6665 71.1033 66.756C69.1929 64.8456 67.683 62.6271 66.5738 60.1004C65.4645 57.5121 64.9099 54.7389 64.9099 51.7808C64.9099 48.8228 65.4645 46.0804 66.5738 43.5537C67.683 40.9654 69.1929 38.7161 71.1033 36.8057C73.0137 34.8952 75.2631 33.3854 77.8514 32.2761C80.4397 31.1668 83.1821 30.6122 86.0785 30.6122ZM86.0785 62.6887C87.5575 62.6887 88.9441 62.4114 90.2383 61.8568C91.5941 61.2405 92.765 60.4394 93.751 59.4533C94.737 58.4673 95.5073 57.3272 96.062 56.0331C96.6782 54.6773 96.9864 53.2599 96.9864 51.7808C96.9864 50.3018 96.6782 48.9152 96.062 47.6211C95.5073 46.2653 94.737 45.0944 93.751 44.1084C92.765 43.1223 91.5941 42.352 90.2383 41.7974C88.9441 41.1811 87.5575 40.873 86.0785 40.873C84.5995 40.873 83.1821 41.1811 81.8263 41.7974C80.5321 42.352 79.392 43.1223 78.406 44.1084C77.42 45.0944 76.6497 46.2653 76.095 47.6211C75.5404 48.9152 75.2631 50.3018 75.2631 51.7808C75.2631 53.2599 75.5404 54.6773 76.095 56.0331C76.6497 57.3272 77.42 58.4673 78.406 59.4533C79.392 60.4394 80.5321 61.2405 81.8263 61.8568C83.1821 62.4114 84.5995 62.6887 86.0785 62.6887Z" fill="white"/>
+<path d="M115.936 30.5861C116.091 30.5861 116.222 30.5294 116.33 30.4162C116.443 30.303 116.499 30.1689 116.499 30.0139C116.499 29.859 116.443 29.7249 116.33 29.6116C116.222 29.4984 116.091 29.4418 115.936 29.4418H114.64V30.5861H115.936ZM117.617 30.0139C117.617 30.2046 117.587 30.3894 117.527 30.5682C117.468 30.741 117.384 30.8989 117.277 31.042C117.17 31.1791 117.042 31.3012 116.893 31.4085C116.744 31.5098 116.58 31.5843 116.401 31.632L117.617 33.4914H116.499L115.355 31.7035H114.64V33.4914H113.523V28.3333H115.936C116.169 28.3333 116.386 28.378 116.589 28.4674C116.791 28.5508 116.97 28.67 117.125 28.825C117.28 28.9799 117.399 29.1587 117.483 29.3613C117.572 29.564 117.617 29.7815 117.617 30.0139Z" fill="white"/>
+<circle cx="115.396" cy="31.2257" r="5.46082" stroke="white" stroke-width="0.510202"/>
+</svg>
+    </div>
+  </div>
+</div>
+
+<div id="siteContent">
+
+<div class="sb">
+  <div class="sb-logos">
+    <span class="sb-ademicon">Ademicon</span>
+    <span class="sb-x">×</span>
+    <div class="sb-puulse-mark">
+      <svg viewBox="0 0 100 64" fill="none" stroke="#C9252D" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M5 32 L30 6 L82 6 L60 28 L95 28 L70 58 L18 58 L40 36 L5 36 Z"/></svg>
+      <span>puulse</span>
+    </div>
+  </div>
+  <div class="sb-int">Guia do Consultor</div>
+
+  <div class="sb-lbl">Navegação</div>
+  <div class="sb-nav">
+    <a onclick="go('o-que-e')">O que é a Puulse</a>
+    <a onclick="go('lead-preparado')">Lead Preparado</a>
+    <a onclick="go('fluxo-lead')">Fluxo de Gestão do Lead</a>
+    <a onclick="go('briefing')">Lendo o Briefing</a>
+    <a onclick="go('scripts')">Scripts de Primeira Mensagem</a>
+    <a onclick="go('reaquecer')">Devolver para Reaquecer</a>
+    <a onclick="go('feedback')">Feedback do Lead</a>
+    <a onclick="go('objecoes')">Objeções e Respostas</a>
+    <a onclick="go('faq')">Dúvidas Frequentes</a>
+  </div>
+
+  <div class="sb-ft">Operação Ademicon<br>Powered by Puulse<br>Confidencial · 2026</div>
+</div>
+
+<div class="main">
+<div class="topbar">
+  <div class="tb-l"><span>Guia do Consultor</span><span class="tb-sep">·</span><span class="tb-s">Ademicon</span></div>
+  <div class="tb-r">Powered by Puulse</div>
+</div>
+
+<div class="hero">
+  <div class="hg"></div><div class="hgrid"></div>
+  <div class="hero-badges">
+    <div class="hbadge"><span class="ademicon-n">Ademicon</span></div>
+    <span class="hbadge-x">×</span>
+    <div class="hbadge">
+      <svg viewBox="0 0 100 64" fill="none" stroke="#C9252D" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"><path d="M5 32 L30 6 L82 6 L60 28 L95 28 L70 58 L18 58 L40 36 L5 36 Z"/></svg>
+      <span class="puulse-n">puulse</span>
+    </div>
+  </div>
+  <div class="htag">Guia Operacional · Consultor</div>
+  <h1>Seu lead, do primeiro contato<br>até o <em>fechamento.</em></h1>
+  <p class="hsub">Este guia mostra como você, consultor Ademicon, trabalha em conjunto com a Puulse — a inteligência artificial que qualifica, organiza e reaquece os seus leads automaticamente. Você foca no que faz de melhor: vender consórcio.</p>
+  <div class="hrow">
+    <div class="hs"><div class="hs-n">5 min</div><div class="hs-l">Tempo máximo até o 1º contato</div></div>
+    <div class="hs"><div class="hs-n">24/7</div><div class="hs-l">A IA nunca para de trabalhar</div></div>
+    <div class="hs"><div class="hs-n">1x<span>/sem</span></div><div class="hs-l">Feedback rápido sobre seus leads</div></div>
+  </div>
+</div>
+
+<div class="cnt">
+
+  <!-- O QUE É A PUULSE -->
+  <div class="sec r" id="o-que-e">
+    <div class="ey">O que é a Puulse</div>
+    <h2 class="stit">A tecnologia que trabalha <em>com você, não no seu lugar.</em></h2>
+    <p class="sbdy">A Puulse é a empresa de inteligência artificial que a Ademicon contratou para potencializar a sua operação como consultor. Ela não vende consórcio — isso é trabalho seu. Ela garante que nenhum lead seu se perca por demora ou desorganização.</p>
+    <div class="box blue r">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div><strong>Em resumo:</strong><p>Quando um cliente interessado em consórcio manda mensagem, a IA da Puulse responde na hora, conversa, prepara o lead e te avisa quando ele está pronto para você assumir. Você recebe um resumo completo antes de qualquer contato.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:28px">Quem atende — Sofia</div>
+    <h3 class="stit" style="font-size:20px">Não é um robô de pergunta e resposta. <em>É uma conversa de verdade.</em></h3>
+    <p class="sbdy">A IA que atende seus leads pelo WhatsApp se chama Sofia. Ela tem sensibilidade pra conduzir a conversa de um jeito natural — não dispara uma lista de perguntas seguidas, ela conversa.</p>
+
+    <div class="cards two r">
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h4>Conversa antes de qualificar</h4>
+        <p>Sofia explora o sonho do cliente — o que ele quer e por quê — antes de simplesmente coletar dados. É isso que dá contexto real ao lead que chega até você.</p>
+      </div>
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <h4>Se adapta ao momento do lead</h4>
+        <p>Se o cliente já entende consórcio, ela não explica de novo. Se ele não sabe, ela ensina em poucas mensagens. Cada conversa segue o ritmo de quem está do outro lado.</p>
+      </div>
+    </div>
+
+    <div class="box amber r" style="margin-top:18px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>Esse processo está sempre evoluindo:</strong><p>O jeito como a Sofia atende é ajustado e refinado toda semana, com base no que está funcionando e no feedback dos consultores. O que está documentado aqui é o processo atual — pode ter pequenos ajustes nas próximas semanas, e este guia será atualizado junto.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:28px">O que ela garante</div>
+    <div class="cards r">
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h4>Responde por você</h4>
+        <p>A IA atende qualquer mensagem recebida, 24 horas por dia, no tom certo para consórcio.</p>
+      </div>
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <h4>Só o lead preparado chega até você</h4>
+        <p>Você recebe o lead apenas quando a Sofia já levantou as informações certas e o contato está pronto para conversar.</p>
+      </div>
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg></div>
+        <h4>Reaquece quem não respondeu</h4>
+        <p>Se o lead não responder você, a IA assume de volta e trabalha para reativar o contato.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- O QUE É LEAD PREPARADO -->
+  <div class="sec r" id="lead-preparado">
+    <div class="ey">Lead Preparado</div>
+    <h2 class="stit">Por que mudamos o nome de <em>"qualificado".</em></h2>
+    <p class="sbdy">Você vai notar que não usamos mais o termo "lead qualificado" neste guia. Trocamos por <strong style="color:#F0F2F5">Lead Preparado</strong> — e existe um motivo direto para essa mudança.</p>
+
+    <div class="box amber r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>O problema com a palavra "qualificado":</strong><p>Ela dá a entender que o lead já está pronto pra fechar, ou que vai responder com certeza. Quando o cliente não responde, o consultor estranha: "como assim qualificado, se ele nem respondeu?" Isso gera frustração e desconfiança no termo.</p></div>
+    </div>
+
+    <div class="box green r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>O que "Lead Preparado" significa de verdade:</strong><p>A IA levantou as informações certas com esse cliente — nome, cidade, idade, o que ele quer, valor, orçamento e motivo. "Preparado" é sobre a qualidade da informação que chega até você, não uma promessa de que o cliente vai responder ou fechar.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:28px">Os 7 critérios</div>
+    <h3 class="stit" style="font-size:20px">O que a IA <em>sempre levanta</em> antes de te passar o lead.</h3>
+    <p class="sbdy">Todo Lead Preparado chega com essas 7 informações. Se alguma estiver faltando no resumo que você recebeu, é sinal de que algo saiu fora do padrão — pode reportar para a Puulse.</p>
+
+    <div class="ktbl-w r">
+      <table class="kt">
+        <thead><tr><th style="width:40px">#</th><th>Critério</th><th>O que é</th></tr></thead>
+        <tbody>
+          <tr><td class="g">1</td><td><strong>Nome</strong></td><td class="d">Nome completo do cliente</td></tr>
+          <tr><td class="g">2</td><td><strong>Cidade</strong></td><td class="d">Onde o cliente mora</td></tr>
+          <tr><td class="g">3</td><td><strong>Idade</strong></td><td class="d">Idade do cliente</td></tr>
+          <tr><td class="g">4</td><td><strong>Tipo de carta</strong></td><td class="d">Imóvel, veículo, moto, serviço ou investimento</td></tr>
+          <tr><td class="g">5</td><td><strong>Valor de interesse</strong></td><td class="d">Faixa de valor da carta que o cliente busca</td></tr>
+          <tr><td class="g">6</td><td><strong>Valor mensal</strong></td><td class="d">Quanto o cliente consegue investir por mês</td></tr>
+          <tr><td class="g">7</td><td><strong>Motivo / desejo</strong></td><td class="d">Por que ele quer fazer o consórcio — o sonho ou necessidade por trás</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="ex r" style="margin-top:18px">
+      <div class="ex-l">Por que o critério 7 é tão importante quanto os outros</div>
+      Saber que o Amauri quer uma casa de 2 ou 3 quartos é dado. Saber que ele quer isso <strong>porque a família está crescendo e o aluguel está pesando</strong> é o que te dá o argumento certo na hora de conversar com ele. O motivo é o que transforma um dado frio em uma conversa de verdade.
+    </div>
+  </div>
+
+  <!-- FLUXO DE GESTÃO DO LEAD -->
+  <div class="sec r" id="fluxo-lead">
+    <div class="ey">Fluxo de Gestão do Lead</div>
+    <h2 class="stit">O caminho completo, <em>passo a passo.</em></h2>
+    <p class="sbdy">Este é o fluxo que você segue com todo lead que a Puulse te entrega. Seguir essa ordem é o que garante que nenhum cliente fique esquecido.</p>
+
+    <div class="flow-diag r">
+      <div class="fn accent">Lead chega</div><div class="fa-arrow">→</div>
+      <div class="fn">IA qualifica</div><div class="fa-arrow">→</div>
+      <div class="fn accent">Você é avisado</div><div class="fa-arrow">→</div>
+      <div class="fn">Lê o briefing</div><div class="fa-arrow">→</div>
+      <div class="fn green">Manda mensagem</div>
+    </div>
+
+    <div class="steps r">
+      <div class="step">
+        <div class="sc">01</div>
+        <div class="sb2">
+          <div class="st">Você recebe o aviso de Lead Preparado</div>
+          <div class="sd">A Puulse te notifica no WhatsApp quando a IA já levantou as informações certas com o cliente. "Preparado" significa que o lead chega até você com contexto completo — não significa que ele vai responder ou fechar na certa.</div>
+          <div class="chips"><span class="chip gn">Automático</span><span class="chip gr">WhatsApp</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">02</div>
+        <div class="sb2">
+          <div class="st">Você lê o briefing da conversa</div>
+          <div class="sd">Antes de mandar qualquer mensagem, leia o resumo que a IA preparou: o que o cliente quer, valor da carta, se quer usar FGTS, e qual é a objeção principal.</div>
+          <div class="chips"><span class="chip rd">Obrigatório antes de responder</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">03</div>
+        <div class="sb2">
+          <div class="st">Você manda a primeira mensagem em até 5 minutos</div>
+          <div class="sd">Use o que está no briefing. Nunca pergunte de novo o que a IA já perguntou — isso faz o cliente perder confiança na operação.</div>
+          <div class="chips"><span class="chip rd">Até 5 minutos</span><span class="chip gn">Use o briefing</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">04</div>
+        <div class="sb2">
+          <div class="st">O lead responde? Você segue a negociação</div>
+          <div class="sd">Conduza normalmente: tire dúvidas, envie simulação, negocie. Continue até fechar ou até identificar que o cliente esfriou.</div>
+          <div class="chips"><span class="chip gn">Negociação normal</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">05</div>
+        <div class="sb2">
+          <div class="st">O lead NÃO responde? Você devolve o contato para a Puulse</div>
+          <div class="sd">Se o cliente ficar sem responder, mande o código do lead com "não responde". A própria Puulse assume e trabalha para reaquecer esse lead automaticamente — sem que você precise insistir manualmente.</div>
+          <div class="chips"><span class="chip rd">Encaminhar contato</span><span class="chip gn">IA reaquece sozinha</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">06</div>
+        <div class="sb2">
+          <div class="st">Se o lead reagir de novo, você é avisado outra vez</div>
+          <div class="sd">Quando a IA reaquecer e o cliente responder, você recebe um novo aviso com o briefing atualizado — e o ciclo de atendimento começa de novo a partir do passo 2.</div>
+          <div class="chips"><span class="chip gn">Novo aviso</span><span class="chip gr">Briefing atualizado</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LENDO O BRIEFING -->
+  <div class="sec r" id="briefing">
+    <div class="ey">Lendo o Briefing</div>
+    <h2 class="stit">O que vem <em>na sua notificação.</em></h2>
+    <p class="sbdy">Quando a IA termina de preparar um lead, ela manda três mensagens em sequência, direto no seu WhatsApp. Vamos ver cada uma delas, exatamente como chegam.</p>
+
+    <div class="ey" style="margin-top:8px">Mensagem 1 — o resumo do Lead Preparado</div>
+    <p class="sbdy" style="margin-bottom:10px">Um texto corrido com os 7 critérios que a IA levantou na conversa: quem é o cliente, onde mora, o que ele quer, valor, orçamento mensal e o motivo por trás do desejo.</p>
+    <div class="ex r" style="background:rgba(7,94,84,.12);border-color:rgba(34,197,94,.25);border-left-color:#22C55E">
+      <div class="ex-l" style="color:#22C55E">Exemplo real — mensagem da IA</div>
+      Amauri dos Santos Araujo, 38 anos, de Barra Velha, busca casa de 2 ou 3 quartos pelo consórcio. Valor: R$350 mil, parcela até R$1.200. Já entendeu as etapas e está pronto para atendimento. Favor enviar print da conversa após contato, caso contrário o lead poderá ser direcionado a outro consultor.<br><br>
+      <strong>Código do lead: 86aj5hbe4</strong>
+    </div>
+    <div class="chips" style="margin-top:8px;margin-bottom:4px">
+      <span class="chip gn">✓ Nome</span><span class="chip gn">✓ Cidade</span><span class="chip gn">✓ Idade</span><span class="chip gn">✓ Tipo de carta</span><span class="chip gn">✓ Valor</span><span class="chip gn">✓ Valor mensal</span><span class="chip am">Motivo — confira no PDF da conversa</span>
+    </div>
+    <p class="sbdy" style="font-size:12px;margin-bottom:0">Quando o motivo não vem no resumo curto, ele geralmente está detalhado na conversa completa (mensagem 2, o PDF). Vale a pena ler antes de entrar em contato.</p>
+
+    <div class="box red r" style="margin-top:18px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9252D" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>Atenção a essa última frase:</strong><p>"Favor enviar print da conversa após contato, caso contrário o lead poderá ser direcionado a outro consultor." Isso não é sugestão — é regra. Veja a seção abaixo sobre o print obrigatório.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:28px">Mensagem 2 — o PDF da conversa completa</div>
+    <p class="sbdy" style="margin-bottom:10px">Logo depois do resumo, a IA manda um arquivo PDF com a conversa inteira que ela teve com o lead, do início ao fim.</p>
+    <div class="ex r" style="background:rgba(7,94,84,.12);border-color:rgba(34,197,94,.25);border-left-color:#22C55E">
+      <div class="ex-l" style="color:#22C55E">Exemplo real — arquivo recebido</div>
+      📄 <strong>Conversa_Amauri dos Santos Araujo.pdf</strong> · PDF · 66 KB<br><br>
+      Lead Preparado · Código: 86aj5hbe4
+    </div>
+    <div class="box blue r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div><strong>Para que serve esse PDF:</strong><p>É a conversa completa entre a IA e o cliente. Leia antes de entrar em contato — ali estão as palavras exatas que o cliente usou, o que pode te ajudar a entender o tom certo de abordagem.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:28px">Mensagem 3 — o contato pronto para salvar</div>
+    <p class="sbdy" style="margin-bottom:10px">Por último, a IA te manda o cartão de contato do lead, já com nome e foto (quando disponível), com dois botões rápidos.</p>
+    <div class="ex r" style="background:rgba(7,94,84,.12);border-color:rgba(34,197,94,.25);border-left-color:#22C55E">
+      <div class="ex-l" style="color:#22C55E">Exemplo real — cartão de contato</div>
+      👤 <strong>Amauri dos Santos Araujo</strong><br><br>
+      <span style="color:#22C55E">[ Conversar ]</span> &nbsp;&nbsp; <span style="color:#22C55E">[ Salvar contato ]</span>
+    </div>
+    <div class="chips" style="margin-top:6px">
+      <span class="chip gn">Conversar = abre o WhatsApp do lead direto</span>
+      <span class="chip gr">Salvar contato = adiciona na sua agenda</span>
+    </div>
+
+    <div class="box amber r" style="margin-top:24px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>Por que isso muda tudo:</strong><p>Entrar em contato sem ler o resumo e o PDF faz você repetir perguntas que a IA já fez. O cliente sente que está falando com uma operação desorganizada — e isso derruba a chance de fechamento na hora.</p></div>
+    </div>
+
+    <div class="script r">
+      <div class="script-l">Como abrir a conversa usando o briefing</div>
+      <div class="msg"><span class="tag">Você</span>"Oi Amauri! Aqui é o [seu nome] da Ademicon. Vi que você está buscando uma casa de 2 ou 3 quartos em Barra Velha, com carta de R$350 mil. Você já entendeu como funciona o consórcio — posso te passar os próximos passos pra dar entrada?"</div>
+      <div class="note">O cliente sente que já está sendo atendido com atenção — porque está.</div>
+    </div>
+
+    <div class="ey" style="margin-top:32px">O print obrigatório</div>
+    <h3 class="stit" style="font-size:20px">Sem print, <em>o lead pode ser redistribuído.</em></h3>
+    <p class="sbdy">Toda mensagem de briefing da IA termina com o aviso sobre o print. Essa é uma regra simples, mas séria.</p>
+    <div class="steps r">
+      <div class="step">
+        <div class="sc">1</div>
+        <div class="sb2">
+          <div class="st">Você faz o primeiro contato com o lead</div>
+          <div class="sd">Usando o botão "Conversar" ou abrindo o WhatsApp normalmente.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">2</div>
+        <div class="sb2">
+          <div class="st">Você tira um print dessa conversa</div>
+          <div class="sd">Só precisa mostrar que o contato foi feito — não precisa ser a conversa inteira.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">3</div>
+        <div class="sb2">
+          <div class="st">Você envia esse print de volta no chat da Puulse</div>
+          <div class="sd">Junto com o código do lead, pra confirmar que o atendimento começou.</div>
+          <div class="chips"><span class="chip rd">Sem isso, risco de redistribuição</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS DE PRIMEIRA MENSAGEM -->
+  <div class="sec r" id="scripts">
+    <div class="ey">Scripts de Primeira Mensagem</div>
+    <h2 class="stit">Como chamar o lead, <em>pronto pra copiar e colar.</em></h2>
+    <p class="sbdy">Estes são modelos de primeira mensagem para o lead que veio da internet — já qualificado pela Sofia. Escolha pelo tipo de carta, clique em copiar, ajuste o nome e o valor, e mande.</p>
+
+    <div class="box blue r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div><strong>Como usar:</strong><p>Troque <code style="background:rgba(0,0,0,.3);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;color:#F0F2F5">[nome]</code> e <code style="background:rgba(0,0,0,.3);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;color:#F0F2F5">[valor]</code> pelas informações reais do briefing antes de enviar. O resto do texto já está pronto.</p></div>
+    </div>
+
+    <div class="copy-tabs r">
+      <div class="copy-tab active" onclick="showCopyGroup('imovel', this)">Imóvel</div>
+      <div class="copy-tab" onclick="showCopyGroup('veiculo', this)">Veículo</div>
+      <div class="copy-tab" onclick="showCopyGroup('moto', this)">Moto</div>
+      <div class="copy-tab" onclick="showCopyGroup('servico', this)">Serviço</div>
+      <div class="copy-tab" onclick="showCopyGroup('investimento', this)">Investimento</div>
+    </div>
+
+    <!-- IMÓVEL -->
+    <div class="copy-group active r" id="copy-imovel">
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 1 · Direto ao ponto<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi que você está buscando um imóvel pelo consórcio, com carta de [valor]. Posso te explicar os próximos passos pra dar entrada?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 2 · Acolhedor<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome], tudo bem? Aqui é o [seu nome], consultor da Ademicon. Vi que você já conversou com a nossa equipe sobre o consórcio de imóvel de [valor] — fico feliz em te ajudar a dar esse passo. Posso te tirar alguma dúvida que ainda tenha ficado?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 3 · Foco na urgência<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi que você quer dar entrada no consórcio de imóvel de [valor] o quanto antes — posso te passar agora mesmo o que é preciso pra começar?</div>
+      </div>
+    </div>
+
+    <!-- VEÍCULO -->
+    <div class="copy-group r" id="copy-veiculo">
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 1 · Direto ao ponto<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi que você está pensando em consórcio de veículo, com carta de [valor]. Posso te explicar como funciona o processo até você sair com o carro?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 2 · Acolhedor<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome], tudo bem? Aqui é o [seu nome] da Ademicon. Vi que você conversou com a gente sobre o consórcio de veículo de [valor]. Posso te ajudar a entender melhor como funciona?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 3 · Foco na economia<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi seu interesse no consórcio de veículo de [valor] — sem juros, é uma das formas mais econômicas de conquistar o carro. Posso te mostrar como funciona a parcela?</div>
+      </div>
+    </div>
+
+    <!-- MOTO -->
+    <div class="copy-group r" id="copy-moto">
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 1 · Direto ao ponto<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi que você está pensando em consórcio de moto, com carta de [valor]. Posso te explicar como funciona o processo?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 2 · Acolhedor<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome], tudo bem? Aqui é o [seu nome] da Ademicon. Vi seu interesse na moto pelo consórcio, carta de [valor]. Posso te tirar alguma dúvida sobre como funciona?</div>
+      </div>
+    </div>
+
+    <!-- SERVIÇO -->
+    <div class="copy-group r" id="copy-servico">
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 1 · Direto ao ponto<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi que você está pensando em usar o consórcio de serviços, carta de [valor]. Posso te explicar como funciona?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 2 · Acolhedor<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome], tudo bem? Aqui é o [seu nome] da Ademicon. Vi seu interesse no consórcio de serviços, carta de [valor]. Posso te ajudar a entender os próximos passos?</div>
+      </div>
+    </div>
+
+    <!-- INVESTIMENTO -->
+    <div class="copy-group r" id="copy-investimento">
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 1 · Direto ao ponto<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome]! Aqui é o [seu nome] da Ademicon. Vi que você está pensando em consórcio como investimento, carta de [valor]. Posso te explicar como funciona o retorno?</div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-label">Modelo 2 · Foco no retorno<button class="copy-btn" onclick="copyScript(this)">📋 Copiar</button></div>
+        <div class="copy-card-text">Oi [nome], tudo bem? Aqui é o [seu nome] da Ademicon. Vi seu interesse na carta de investimento de [valor] — com ela, o lucro médio na venda costuma ser de 30% a 40%. Posso te explicar melhor como funciona?</div>
+      </div>
+    </div>
+
+    <div class="box amber r" style="margin-top:18px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>Sempre use o briefing da Sofia para personalizar:</strong><p>Esses modelos são um ponto de partida. Se o briefing já trouxe o motivo do lead (por que ele quer aquele bem), inclua isso na mensagem — fica muito mais pessoal e aumenta a chance de resposta.</p></div>
+    </div>
+  </div>
+
+  <!-- DEVOLVER PARA REAQUECER -->
+  <div class="sec r" id="reaquecer">
+    <div class="ey">Devolver para Reaquecer</div>
+    <h2 class="stit">Quando o lead esfria, <em>a IA assume.</em></h2>
+    <p class="sbdy">Nem todo lead responde de primeira. Em vez de insistir manualmente ou desistir do cliente, você devolve o contato para a Puulse trabalhar.</p>
+
+    <div class="steps r">
+      <div class="step">
+        <div class="sc">01</div>
+        <div class="sb2">
+          <div class="st">Identifique quando reencaminhar</div>
+          <div class="sd">Se o cliente não respondeu depois de 2 a 3 tentativas suas, ou ficou em silêncio por mais de 48 horas, é hora de devolver o lead.</div>
+          <div class="chips"><span class="chip am">Sem resposta após 48h</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">02</div>
+        <div class="sb2">
+          <div class="st">Mande o código do lead com "não responde"</div>
+          <div class="sd">Escreva o código do lead seguido de "não responde". A partir desse feedback, a própria IA já assume e começa a trabalhar o reaquecimento — sem que você precise fazer mais nada.</div>
+          <div class="chips"><span class="chip rd">Encaminhar contato</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">03</div>
+        <div class="sb2">
+          <div class="st">A IA reaquece com uma nova abordagem</div>
+          <div class="sd">A Puulse manda mensagens com um tom diferente do seu — mais leve, oferecendo conteúdo ou uma nova pergunta — para tentar reabrir a conversa sem parecer insistência.</div>
+          <div class="chips"><span class="chip gn">Abordagem automática</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">04</div>
+        <div class="sb2">
+          <div class="st">Se o lead reagir, ele volta para você</div>
+          <div class="sd">No momento em que o cliente responder de novo, você recebe um novo aviso com o histórico completo — e retoma a negociação de onde parou.</div>
+          <div class="chips"><span class="chip gn">Retorna pra você</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box green r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Por que isso importa:</strong><p>Lead que esfria não é lead perdido — é lead que precisa de outro momento e outra abordagem. Devolver para a IA evita que você gaste energia insistindo manualmente, enquanto a Puulse trabalha esse contato em segundo plano.</p></div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK SEMANAL -->
+  <div class="sec r" id="feedback">
+    <div class="ey">Feedback do Lead</div>
+    <h2 class="stit">Toda vez que você fala com um lead, <em>você responde isso.</em></h2>
+    <p class="sbdy">Esse feedback não é opcional. Ele é o que faz o CRM da Ademicon ficar correto e atualizado. São poucas perguntas, sempre as mesmas, sempre nessa ordem. Vamos por partes.</p>
+
+    <div class="box red r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9252D" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>Regra número 1 — o código vem sempre primeiro.</strong><p>Todo lead que a Puulse te manda tem um código (exemplo: <code style="background:rgba(0,0,0,.3);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;color:#F0F2F5">86aj0m892</code>). Esse código está no briefing que você recebeu. Sem o código, o feedback não pode ser documentado no CRM — então ele é sempre a primeira informação que você escreve.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:28px">O formulário padrão</div>
+    <h3 class="stit" style="font-size:20px">Estas são <em>as 6 perguntas.</em></h3>
+    <p class="sbdy">Sempre nesta ordem. Sempre completo — exceto na situação de "lead não responde", explicada mais abaixo.</p>
+
+    <div class="feedback-template r" style="background:#0a0d12;border-color:rgba(34,197,94,.25);">
+      <div class="ft-row" style="border-bottom-color:rgba(34,197,94,.12)">
+        <div class="ft-label" style="color:#22C55E">1 · Código</div>
+        <div class="ft-value">O código do lead, copiado direto do briefing.<br><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA5B8">Cod: 86aj0m892</span></div>
+      </div>
+      <div class="ft-row" style="border-bottom-color:rgba(34,197,94,.12)">
+        <div class="ft-label" style="color:#22C55E">2 · Status</div>
+        <div class="ft-value">O lead demonstrou interesse ou não.<br><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA5B8">Status do lead: Interessado / Sem interesse</span></div>
+      </div>
+      <div class="ft-row" style="border-bottom-color:rgba(34,197,94,.12)">
+        <div class="ft-label" style="color:#22C55E">3 · Reunião</div>
+        <div class="ft-value">Vocês marcaram uma reunião ou call?<br><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA5B8">Reunião: ( Sim / Não )</span></div>
+      </div>
+      <div class="ft-row" style="border-bottom-color:rgba(34,197,94,.12)">
+        <div class="ft-label" style="color:#22C55E">4 · Orçamento</div>
+        <div class="ft-value">Quanto o cliente tem disponível ou pretende investir.<br><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA5B8">Orçamento: ( Valor )</span></div>
+      </div>
+      <div class="ft-row" style="border-bottom-color:rgba(34,197,94,.12)">
+        <div class="ft-label" style="color:#22C55E">5 · Fechamento</div>
+        <div class="ft-value">Existe chance real de fechar? Se sim, quando?<br><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA5B8">Possível fechamento: Se sim, quando?</span></div>
+      </div>
+      <div class="ft-row">
+        <div class="ft-label" style="color:#22C55E">6 · Domínio</div>
+        <div class="ft-value">Você quer continuar com esse lead ou devolver pra IA?<br><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9AA5B8">Deseja ficar com o lead?: Sim ou não</span></div>
+      </div>
+    </div>
+
+    <div class="ex r">
+      <div class="ex-l">Exatamente como você escreve, sem formatação extra</div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#C9D2E0;line-height:1.9">
+      Cod: 86aj0m892<br>
+      Status do lead: Interessado / Sem interesse<br>
+      Reunião ( Sim/Não )<br>
+      Orçamento: ( Valor )<br>
+      Possível fechamento: Se sim, quando?<br>
+      Deseja ficar com o lead?: Sim ou não
+      </span>
+    </div>
+
+    <div class="ey" style="margin-top:28px">Texto ou áudio — você escolhe</div>
+    <h3 class="stit" style="font-size:20px">Não precisa digitar <em>bonitinho.</em></h3>
+    <p class="sbdy">Se for mais rápido pra você, pode mandar todas essas informações em áudio. A Puulse entende e transcreve automaticamente — o importante é que as informações estejam lá, não o formato.</p>
+
+    <div class="cards two r">
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <h4>Por escrito</h4>
+        <p>Segue o modelo de texto, campo por campo, na ordem mostrada acima. Ideal quando você já está com o celular na mão depois da ligação.</p>
+      </div>
+      <div class="card">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+        <h4>Por áudio</h4>
+        <p>Grave um áudio falando o código primeiro e depois as mesmas informações, na mesma ordem. A Puulse transcreve e organiza tudo automaticamente.</p>
+      </div>
+    </div>
+
+    <div class="script r">
+      <div class="script-l">Exemplo de como falar no áudio</div>
+      <div class="msg"><span class="tag">Você</span>"Código 86aj0m892. O lead tá interessado, marcamos reunião pra quinta-feira, ele falou que tem uns 15 mil de orçamento, acho que fecha ainda esse mês, e eu quero ficar com esse lead."</div>
+      <div class="note">Falando nessa ordem — código, status, reunião, orçamento, fechamento, domínio — a Puulse já entende e organiza tudo certinho no CRM.</div>
+    </div>
+
+    <div class="box blue r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div><strong>Vale também pra "não responde":</strong><p>Se o lead não respondeu, você pode simplesmente falar em áudio: "código tal, não responde." Não precisa escrever — vale o mesmo atalho do texto.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:32px">A pergunta mais importante — domínio do lead</div>
+    <h3 class="stit" style="font-size:20px">"Deseja ficar com o lead?" <em>decide o futuro dele.</em></h3>
+    <p class="sbdy">Essa última pergunta existe pra um motivo muito específico: o cliente que diz "quero fechar, mas não agora". Aqui você escolhe o que acontece com esse lead.</p>
+
+    <div class="cards two r">
+      <div class="card" style="border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.04)">
+        <div class="ci" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25);color:#22C55E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <h4 style="color:#22C55E">Sim, eu fico com o lead</h4>
+        <p>O lead passa a ser <strong style="color:#C9D2E0">seu, todos os meses</strong>, até ele fechar ou você decidir devolver. Você é responsável por continuar a negociação e será cobrado, mês a mês, sobre o andamento — fechou ou não.</p>
+      </div>
+      <div class="card" style="border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.04)">
+        <div class="ci" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:#F59E0B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg></div>
+        <h4 style="color:#F59E0B">Não, devolvo pra IA</h4>
+        <p>O lead vai para o <strong style="color:#C9D2E0">reaquecimento da Puulse</strong>. Quando ele reagir de novo, entra na fila de redistribuição — podendo ser direcionado para você ou para outro consultor.</p>
+      </div>
+    </div>
+
+    <div class="box amber r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+      <div><strong>Regra simples de lembrar:</strong><p>Ficar com o lead = responsabilidade sua todo mês. Devolver = a IA cuida e ele pode ir pra outro consultor depois. Escolha com cuidado — não existe meio-termo.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:32px">Quando o lead não responde</div>
+    <h3 class="stit" style="font-size:20px">Aqui o feedback é <em>mais simples ainda.</em></h3>
+    <p class="sbdy">Se o cliente simplesmente não respondeu nenhuma mensagem sua, você não precisa preencher o formulário completo. Só duas informações:</p>
+
+    <div class="script r">
+      <div class="script-l">O que escrever quando o lead não responde</div>
+      <div class="msg"><span class="tag">Você</span>Cod: 86aj0m892<br>Não responde</div>
+      <div class="note">Pronto. Só isso. A Puulse já entende que deve assumir esse contato e iniciar o reaquecimento automaticamente.</div>
+    </div>
+
+    <div class="box green r">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><strong>Por que simplificar nessa situação:</strong><p>Se o cliente não respondeu, você não tem como saber orçamento, reunião ou chance de fechamento. Preencher esses campos sem informação real só geraria dado errado no CRM. Por isso, "não responde" basta.</p></div>
+    </div>
+
+    <div class="ey" style="margin-top:32px">As 3 regras de ouro</div>
+    <h3 class="stit" style="font-size:20px">Simples de seguir, <em>impossível de esquecer.</em></h3>
+    <div class="steps r">
+      <div class="step">
+        <div class="sc">1</div>
+        <div class="sb2">
+          <div class="st">O código sempre vem primeiro</div>
+          <div class="sd">Não existe feedback sem código. É a única forma de a Puulse saber qual lead você está reportando, e de documentar isso corretamente no CRM da Ademicon.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">2</div>
+        <div class="sb2">
+          <div class="st">Comunicação clara, sem rodeio</div>
+          <div class="sd">Use exatamente o formato mostrado neste guia. Frases soltas ou fora do padrão dificultam o registro automático no sistema.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">3</div>
+        <div class="sb2">
+          <div class="st">Toda interação gera um feedback</div>
+          <div class="sd">Lead respondeu? Feedback completo. Lead não respondeu? Código + "não responde". Não existe terceira opção — sempre uma das duas.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBJEÇÕES E RESPOSTAS -->
+  <div class="sec r" id="objecoes">
+    <div class="ey">Objeções e Respostas</div>
+    <h2 class="stit">O que responder em <em>cada situação.</em></h2>
+    <p class="sbdy">Estas são as objeções mais comuns no consórcio Ademicon e como respondê-las usando o contexto que a IA já levantou.</p>
+    <div class="steps r">
+      <div class="step">
+        <div class="sc">01</div>
+        <div class="sb2">
+          <div class="st">"Está caro" / "Financiamento é mais rápido"</div>
+          <div class="script">
+            <div class="script-l">Como responder</div>
+            <div class="msg">"Entendo a comparação! Mas no consórcio você não paga juros — só taxa de administração. Olhando o total pago no final, costuma sair de 30 a 40% mais barato. Posso te mostrar a simulação real pro seu caso?"</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">02</div>
+        <div class="sb2">
+          <div class="st">"Não quero esperar a contemplação"</div>
+          <div class="script">
+            <div class="script-l">Como responder</div>
+            <div class="msg">"Faz sentido querer mais rapidez! Existem formas de antecipar — pelo lance ou comprando uma carta já contemplada. Quer que eu te explique as duas opções?"</div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sc">03</div>
+        <div class="sb2">
+          <div class="st">"Vou pensar mais"</div>
+          <div class="script">
+            <div class="script-l">Como responder</div>
+            <div class="msg">"Sem problema! Só pra eu te ajudar melhor: tem alguma dúvida específica que ainda ficou em aberto? Às vezes uma informação resolve a decisão."</div>
+            <div class="note">Se o cliente não responder após essa pergunta, ele é candidato a devolver pra IA reaquecer.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="sec r" id="faq">
+    <div class="ey">Dúvidas Frequentes</div>
+    <h2 class="stit">Situações do dia a dia <em>resolvidas.</em></h2>
+    <div class="faq r">
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Posso entrar em contato com o lead antes de receber o aviso da Puulse?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Não recomendado. A IA está em processo de levantamento de informações — interromper nesse momento pode confundir o cliente e fazer ele receber mensagens duplicadas. Espere o aviso de "Lead Preparado".</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Como eu devolvo o lead para a IA reaquecer?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Você não precisa encaminhar o contato. Basta mandar o código do lead seguido de "não responde" — exatamente como mostrado na seção de Feedback do Lead. A partir desse aviso, a IA já assume e começa a trabalhar o reaquecimento automaticamente.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Se eu devolver o lead, eu perco ele?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Não. O lead continua seu. A IA só reaquece o contato — quando o cliente responder de novo, ele volta para você com um novo aviso e o histórico atualizado.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Posso mandar feedback fora do dia da semana combinado?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Sim, pode mandar a qualquer momento se notar algo importante (erro, demora, cliente confuso). O feedback semanal é o mínimo — não o único momento de contato.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Se eu disser "sim, fico com o lead" e ele não fechar nunca, o que acontece?</span><div class="fi-ico">+</div></div>
+        <div class="fa">O lead continua seu. Todo mês você vai reportar o status dele — fechou ou não — no feedback. Não existe prazo automático para o lead ser tirado de você; a responsabilidade de continuar ou devolver é sempre sua, mês a mês.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Esqueci de copiar o código do lead. Posso mandar o feedback sem ele?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Não. Sem o código, a Puulse não consegue saber qual lead você está reportando, e o CRM não documenta a informação corretamente. Volte no briefing original, copie o código, e só então envie o feedback.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>O lead respondeu, mas só uma vez e depois sumiu de novo. O que eu reporto?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Reporte o feedback completo com base no que ele disse na única resposta (status, se mencionou orçamento, etc). Se depois disso ele ficar em silêncio, você decide: continuar tentando (e ele fica no seu domínio) ou devolver para a Puulse reaquecer.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>E se o cliente pedir para não receber mais mensagens?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Respeite imediatamente. Avise a Puulse para que o sistema marque esse contato como "não perturbar" — assim nem você nem a IA entram em contato de novo com esse lead.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Esqueci de enviar o print depois do primeiro contato. O que acontece?</span><div class="fi-ico">+</div></div>
+        <div class="fa">O lead corre o risco de ser redistribuído para outro consultor, já que não há comprovação de que o atendimento começou. Envie o print o quanto antes, mesmo atrasado, junto com o código do lead, para regularizar.</div>
+      </div>
+      <div class="fi">
+        <div class="fq" onclick="tfaq(this)"><span>Posso mandar o feedback em áudio em vez de escrever?</span><div class="fi-ico">+</div></div>
+        <div class="fa">Pode sim. Grave um áudio falando o código do lead primeiro e depois as mesmas informações do formulário, na mesma ordem. A Puulse transcreve e organiza tudo automaticamente no CRM — não precisa digitar nada.</div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="page-footer">
+  <span class="page-footer-text">Criação de</span>
+  <div class="page-footer-logo"><svg width="64" height="35" viewBox="0 0 189 102" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M142.808 32.0867C142.808 32.1752 142.796 32.3643 142.772 32.6539H137.595C137.691 33.2413 137.933 33.7079 138.319 34.0539C138.705 34.3998 139.236 34.5728 139.912 34.5728C140.29 34.5728 140.684 34.5044 141.095 34.3677C141.513 34.2309 141.879 34.0539 142.193 33.8366L142.652 34.6694C142.322 34.9268 141.907 35.1441 141.408 35.3211C140.91 35.49 140.403 35.5745 139.888 35.5745C139.115 35.5745 138.464 35.4056 137.933 35.0676C137.402 34.7297 137.024 34.3154 136.798 33.8246C136.573 33.3257 136.46 32.7786 136.46 32.1833C136.46 31.2097 136.762 30.4052 137.365 29.7695C137.969 29.1339 138.749 28.8161 139.707 28.8161C140.616 28.8161 141.36 29.1098 141.939 29.6971C142.519 30.2845 142.808 31.081 142.808 32.0867ZM141.071 30.3126C140.708 29.9667 140.254 29.7937 139.707 29.7937C139.16 29.7937 138.693 29.9707 138.307 30.3247C137.921 30.6707 137.683 31.1252 137.595 31.6884H141.674C141.642 31.1172 141.441 30.6586 141.071 30.3126ZM144.925 26.2938V35.4297H143.851V26.2938H144.925ZM152.35 32.0867C152.35 32.1752 152.338 32.3643 152.313 32.6539H147.136C147.233 33.2413 147.474 33.7079 147.86 34.0539C148.246 34.3998 148.777 34.5728 149.453 34.5728C149.831 34.5728 150.226 34.5044 150.636 34.3677C151.054 34.2309 151.42 34.0539 151.734 33.8366L152.193 34.6694C151.863 34.9268 151.448 35.1441 150.95 35.3211C150.451 35.49 149.944 35.5745 149.429 35.5745C148.657 35.5745 148.005 35.4056 147.474 35.0676C146.943 34.7297 146.565 34.3154 146.339 33.8246C146.114 33.3257 146.002 32.7786 146.002 32.1833C146.002 31.2097 146.303 30.4052 146.907 29.7695C147.51 29.1339 148.291 28.8161 149.248 28.8161C150.157 28.8161 150.901 29.1098 151.481 29.6971C152.06 30.2845 152.35 31.081 152.35 32.0867ZM150.612 30.3126C150.25 29.9667 149.795 29.7937 149.248 29.7937C148.701 29.7937 148.234 29.9707 147.848 30.3247C147.462 30.6707 147.225 31.1252 147.136 31.6884H151.215C151.183 31.1172 150.982 30.6586 150.612 30.3126ZM155.583 33.897L157.598 28.973H158.781L155.933 35.4176H155.209L152.361 28.973H153.555L155.583 33.897ZM164.358 29.9264V28.973H165.396V35.4297H164.358V34.5004C163.771 35.2245 163.003 35.5866 162.053 35.5866C161.12 35.5866 160.348 35.2607 159.736 34.609C159.125 33.9493 158.819 33.1326 158.819 32.1591C158.819 31.1856 159.125 30.3891 159.736 29.7695C160.348 29.1339 161.12 28.8161 162.053 28.8161C162.995 28.8161 163.763 29.1862 164.358 29.9264ZM164.443 32.1953C164.443 31.5356 164.23 30.9724 163.803 30.5057C163.385 30.0391 162.838 29.8058 162.162 29.8058C161.486 29.8058 160.939 30.0391 160.521 30.5057C160.11 30.9643 159.905 31.5316 159.905 32.2074C159.905 32.8752 160.11 33.4424 160.521 33.9091C160.947 34.3677 161.494 34.597 162.162 34.597C162.83 34.597 163.377 34.3677 163.803 33.9091C164.23 33.4344 164.443 32.8631 164.443 32.1953ZM170.587 34.2108L171.009 35.0435C170.551 35.4056 169.987 35.5866 169.32 35.5866C168.652 35.5866 168.145 35.3814 167.799 34.9711C167.453 34.5527 167.28 33.9573 167.28 33.1849V29.9023H166.133V28.973H167.292V26.6921H168.354V28.973H170.659V29.9023H168.354V33.2936C168.354 34.1625 168.708 34.597 169.416 34.597C169.778 34.597 170.168 34.4682 170.587 34.2108ZM172.154 28.0317C171.921 28.0317 171.728 27.9552 171.575 27.8024C171.422 27.6495 171.346 27.4604 171.346 27.2352C171.346 27.0099 171.422 26.8248 171.575 26.68C171.728 26.5271 171.921 26.4507 172.154 26.4507C172.371 26.4507 172.556 26.5271 172.709 26.68C172.862 26.8248 172.939 27.0099 172.939 27.2352C172.939 27.4604 172.862 27.6495 172.709 27.8024C172.556 27.9552 172.371 28.0317 172.154 28.0317ZM172.673 28.973V35.4297H171.599V28.973H172.673ZM175.222 35.4297H174.148V28.973H175.198V29.8902C175.608 29.1661 176.292 28.8041 177.25 28.8041C177.974 28.8041 178.581 29.0374 179.072 29.504C179.563 29.9707 179.808 30.6425 179.808 31.5195V35.4297H178.734V31.8333C178.734 31.1896 178.581 30.6908 178.275 30.3368C177.97 29.9828 177.559 29.8058 177.044 29.8058C176.505 29.8058 176.067 29.9948 175.729 30.373C175.391 30.7511 175.222 31.2379 175.222 31.8333V35.4297ZM186.328 29.8178V28.973H187.402V34.7659C187.402 35.8038 187.089 36.6325 186.461 37.252C185.85 37.8635 185.017 38.1692 183.963 38.1692C182.909 38.1692 181.968 37.8675 181.139 37.2641L181.658 36.4072C182.366 36.9302 183.134 37.1917 183.963 37.1917C184.687 37.1917 185.258 36.9825 185.677 36.5641C186.111 36.1538 186.328 35.6188 186.328 34.959V34.428C185.749 35.1038 184.985 35.4418 184.035 35.4418C183.102 35.4418 182.33 35.124 181.718 34.4883C181.099 33.8447 180.789 33.0562 180.789 32.1229C180.789 31.1896 181.107 30.4052 181.742 29.7695C182.378 29.1339 183.158 28.8161 184.084 28.8161C185.009 28.8161 185.757 29.15 186.328 29.8178ZM184.144 29.7937C183.476 29.7937 182.933 30.0149 182.515 30.4575C182.088 30.908 181.875 31.4632 181.875 32.1229C181.875 32.7907 182.088 33.3499 182.515 33.8004C182.949 34.2429 183.492 34.4642 184.144 34.4642C184.804 34.4642 185.343 34.2429 185.761 33.8004C186.196 33.3579 186.413 32.7987 186.413 32.1229C186.413 31.4632 186.196 30.908 185.761 30.4575C185.343 30.0149 184.804 29.7937 184.144 29.7937ZM142.808 51.0867C142.808 51.1752 142.796 51.3643 142.772 51.6539H137.595C137.691 52.2413 137.933 52.7079 138.319 53.0539C138.705 53.3998 139.236 53.5728 139.912 53.5728C140.29 53.5728 140.684 53.5044 141.095 53.3677C141.513 53.2309 141.879 53.0539 142.193 52.8366L142.652 53.6694C142.322 53.9268 141.907 54.1441 141.408 54.3211C140.91 54.49 140.403 54.5745 139.888 54.5745C139.115 54.5745 138.464 54.4056 137.933 54.0676C137.402 53.7297 137.024 53.3154 136.798 52.8246C136.573 52.3257 136.46 51.7786 136.46 51.1833C136.46 50.2097 136.762 49.4052 137.365 48.7695C137.969 48.1339 138.749 47.8161 139.707 47.8161C140.616 47.8161 141.36 48.1098 141.939 48.6971C142.519 49.2845 142.808 50.081 142.808 51.0867ZM141.071 49.3126C140.708 48.9667 140.254 48.7937 139.707 48.7937C139.16 48.7937 138.693 48.9707 138.307 49.3247C137.921 49.6707 137.683 50.1252 137.595 50.6884H141.674C141.642 50.1172 141.441 49.6586 141.071 49.3126ZM146.042 52.897L148.057 47.973H149.24L146.392 54.4176H145.668L142.819 47.973H144.014L146.042 52.897ZM155.638 51.0867C155.638 51.1752 155.626 51.3643 155.602 51.6539H150.424C150.521 52.2413 150.762 52.7079 151.148 53.0539C151.535 53.3998 152.066 53.5728 152.741 53.5728C153.12 53.5728 153.514 53.5044 153.924 53.3677C154.342 53.2309 154.709 53.0539 155.022 52.8366L155.481 53.6694C155.151 53.9268 154.737 54.1441 154.238 54.3211C153.739 54.49 153.232 54.5745 152.717 54.5745C151.945 54.5745 151.293 54.4056 150.762 54.0676C150.231 53.7297 149.853 53.3154 149.628 52.8246C149.402 52.3257 149.29 51.7786 149.29 51.1833C149.29 50.2097 149.591 49.4052 150.195 48.7695C150.798 48.1339 151.579 47.8161 152.536 47.8161C153.445 47.8161 154.19 48.1098 154.769 48.6971C155.348 49.2845 155.638 50.081 155.638 51.0867ZM153.9 49.3126C153.538 48.9667 153.083 48.7937 152.536 48.7937C151.989 48.7937 151.522 48.9707 151.136 49.3247C150.75 49.6707 150.513 50.1252 150.424 50.6884H154.503C154.471 50.1172 154.27 49.6586 153.9 49.3126ZM157.754 54.4297H156.68V47.973H157.694V48.9385C158.064 48.1822 158.688 47.8041 159.565 47.8041C159.79 47.8041 160.039 47.8362 160.313 47.9006L160.216 48.9506C159.983 48.8782 159.762 48.842 159.553 48.842C159.013 48.842 158.579 49.027 158.249 49.3971C157.919 49.7592 157.754 50.2781 157.754 50.954V54.4297ZM163.732 52.9211L165.506 47.973H166.701L163.973 55.2141C163.716 55.9061 163.41 56.4049 163.056 56.7106C162.71 57.0164 162.292 57.1692 161.801 57.1692C161.391 57.1692 161.057 57.0888 160.799 56.9279L160.92 55.9745C161.21 56.1032 161.471 56.1676 161.705 56.1676C162.244 56.1676 162.67 55.7854 162.984 55.021L163.237 54.3935L160.437 47.973H161.68L163.732 52.9211ZM144.257 66.8041C145.045 66.8041 145.669 67.0575 146.127 67.5644C146.586 68.0713 146.815 68.7511 146.815 69.604V73.4297H145.741V69.7609C145.741 69.1413 145.596 68.6626 145.307 68.3247C145.025 67.9787 144.639 67.8058 144.148 67.8058C143.625 67.8058 143.199 67.9908 142.869 68.3609C142.547 68.723 142.386 69.1977 142.386 69.785V73.4297H141.312V69.785C141.312 69.1655 141.167 68.6827 140.877 68.3368C140.596 67.9828 140.206 67.8058 139.707 67.8058C139.176 67.8058 138.745 67.9908 138.415 68.3609C138.094 68.723 137.933 69.2057 137.933 69.8091V73.4297H136.859V66.973H137.909V67.9264C138.102 67.5805 138.367 67.3069 138.705 67.1058C139.051 66.9046 139.433 66.8041 139.852 66.8041C140.294 66.8041 140.7 66.9127 141.071 67.1299C141.441 67.3391 141.718 67.6328 141.903 68.0109C142.12 67.6489 142.442 67.3592 142.869 67.142C143.295 66.9167 143.758 66.8041 144.257 66.8041ZM147.789 70.1953C147.789 69.2459 148.107 68.4494 148.743 67.8058C149.378 67.146 150.187 66.8161 151.169 66.8161C152.142 66.8161 152.947 67.146 153.582 67.8058C154.226 68.4655 154.548 69.262 154.548 70.1953C154.548 71.1608 154.23 71.9654 153.594 72.609C152.959 73.2607 152.15 73.5866 151.169 73.5866C150.187 73.5866 149.378 73.2607 148.743 72.609C148.107 71.9654 147.789 71.1608 147.789 70.1953ZM153.462 70.1953C153.462 69.5436 153.24 68.9844 152.798 68.5178C152.347 68.0431 151.804 67.8058 151.169 67.8058C150.533 67.8058 149.99 68.0431 149.539 68.5178C149.097 68.9844 148.876 69.5436 148.876 70.1953C148.876 70.8631 149.097 71.4303 149.539 71.897C149.982 72.3636 150.525 72.597 151.169 72.597C151.812 72.597 152.355 72.3636 152.798 71.897C153.24 71.4303 153.462 70.8631 153.462 70.1953ZM163.002 66.8041C163.791 66.8041 164.414 67.0575 164.873 67.5644C165.332 68.0713 165.561 68.7511 165.561 69.604V73.4297H164.487V69.7609C164.487 69.1413 164.342 68.6626 164.052 68.3247C163.771 67.9787 163.385 67.8058 162.894 67.8058C162.371 67.8058 161.944 67.9908 161.615 68.3609C161.293 68.723 161.132 69.1977 161.132 69.785V73.4297H160.058V69.785C160.058 69.1655 159.913 68.6827 159.623 68.3368C159.342 67.9828 158.951 67.8058 158.453 67.8058C157.922 67.8058 157.491 67.9908 157.161 68.3609C156.839 68.723 156.679 69.2057 156.679 69.8091V73.4297H155.604V66.973H156.654V67.9264C156.847 67.5805 157.113 67.3069 157.451 67.1058C157.797 66.9046 158.179 66.8041 158.597 66.8041C159.04 66.8041 159.446 66.9127 159.816 67.1299C160.186 67.3391 160.464 67.6328 160.649 68.0109C160.866 67.6489 161.188 67.3592 161.615 67.142C162.041 66.9167 162.504 66.8041 163.002 66.8041ZM172.895 70.0867C172.895 70.1752 172.883 70.3643 172.859 70.6539H167.682C167.778 71.2413 168.02 71.7079 168.406 72.0539C168.792 72.3998 169.323 72.5728 169.999 72.5728C170.377 72.5728 170.771 72.5044 171.182 72.3677C171.6 72.2309 171.966 72.0539 172.28 71.8366L172.738 72.6694C172.409 72.9268 171.994 73.1441 171.495 73.3211C170.997 73.49 170.49 73.5745 169.975 73.5745C169.202 73.5745 168.551 73.4056 168.02 73.0676C167.489 72.7297 167.11 72.3154 166.885 71.8246C166.66 71.3257 166.547 70.7786 166.547 70.1833C166.547 69.2097 166.849 68.4052 167.452 67.7695C168.056 67.1339 168.836 66.8161 169.794 66.8161C170.703 66.8161 171.447 67.1098 172.026 67.6971C172.606 68.2845 172.895 69.081 172.895 70.0867ZM171.157 68.3126C170.795 67.9667 170.341 67.7937 169.794 67.7937C169.247 67.7937 168.78 67.9707 168.394 68.3247C168.008 68.6707 167.77 69.1252 167.682 69.6884H171.761C171.729 69.1172 171.528 68.6586 171.157 68.3126ZM175.012 73.4297H173.938V66.973H174.988V67.8902C175.398 67.1661 176.082 66.8041 177.039 66.8041C177.763 66.8041 178.371 67.0374 178.862 67.504C179.353 67.9707 179.598 68.6425 179.598 69.5195V73.4297H178.524V69.8333C178.524 69.1896 178.371 68.6908 178.065 68.3368C177.759 67.9828 177.349 67.8058 176.834 67.8058C176.295 67.8058 175.857 67.9948 175.519 68.373C175.181 68.7511 175.012 69.2379 175.012 69.8333V73.4297ZM184.635 72.2108L185.058 73.0435C184.599 73.4056 184.036 73.5866 183.368 73.5866C182.7 73.5866 182.193 73.3814 181.847 72.9711C181.501 72.5527 181.329 71.9573 181.329 71.1849V67.9023H180.182V66.973H181.341V64.6921H182.403V66.973H184.708V67.9023H182.403V71.2936C182.403 72.1625 182.757 72.597 183.465 72.597C183.827 72.597 184.217 72.4682 184.635 72.2108ZM185.37 72.8745C185.37 72.6734 185.442 72.5044 185.587 72.3677C185.732 72.2228 185.909 72.1504 186.118 72.1504C186.327 72.1504 186.5 72.2228 186.637 72.3677C186.782 72.5044 186.854 72.6734 186.854 72.8745C186.854 73.0918 186.782 73.2728 186.637 73.4176C186.5 73.5544 186.327 73.6228 186.118 73.6228C185.909 73.6228 185.732 73.5544 185.587 73.4176C185.442 73.2728 185.37 73.0918 185.37 72.8745Z" fill="white"/>
+<path d="M40.6734 50.5791V71.9327H29.1184V50.9489C29.1184 47.9292 28.4406 45.4642 27.0848 43.5537C25.7906 41.6433 23.7878 40.6881 21.0762 40.6881C18.303 40.6881 16.331 41.6433 15.1601 43.5537C13.9892 45.4642 13.4037 47.9292 13.4037 50.9489V71.9327H1.84879V31.629H13.4037V33.94C14.5746 32.8924 15.8688 32.0912 17.2862 31.5366C18.7652 30.9203 20.4291 30.6122 22.2779 30.6122C25.1744 30.6122 27.7627 31.1052 30.0428 32.0912C32.323 33.0773 34.2334 34.4639 35.7741 36.251C37.3764 37.9766 38.5781 40.0718 39.3792 42.5369C40.242 44.9403 40.6734 47.6211 40.6734 50.5791ZM58.4615 41.9823V56.7726C58.4615 58.1284 58.9237 59.2685 59.8481 60.1928C60.8341 61.1172 62.005 61.5794 63.3608 61.5794H65.7642V71.9327H61.512C59.4783 71.9327 57.5679 71.5629 55.7807 70.8234C54.0552 70.0222 52.5145 68.9746 51.1588 67.6804C49.8646 66.3247 48.817 64.784 48.0158 63.0585C47.2763 61.2713 46.9065 59.3609 46.9065 57.3272V41.9823H39.7887V31.629H46.9065V21.4607H58.4615V31.629H65.7642V41.9823H58.4615ZM86.0785 30.6122C89.0366 30.6122 91.7789 31.1668 94.3056 32.2761C96.8939 33.3854 99.1433 34.8952 101.054 36.8057C103.026 38.7161 104.566 40.9654 105.676 43.5537C106.785 46.0804 107.34 48.8228 107.34 51.7808C107.34 54.7389 106.785 57.5121 105.676 60.1004C104.566 62.6271 103.026 64.8456 101.054 66.756C99.1433 68.6665 96.8939 70.1763 94.3056 71.2856C91.7789 72.3949 89.0366 72.9495 86.0785 72.9495C83.1821 72.9495 80.4397 72.3949 77.8514 71.2856C75.2631 70.1763 73.0137 68.6665 71.1033 66.756C69.1929 64.8456 67.683 62.6271 66.5738 60.1004C65.4645 57.5121 64.9099 54.7389 64.9099 51.7808C64.9099 48.8228 65.4645 46.0804 66.5738 43.5537C67.683 40.9654 69.1929 38.7161 71.1033 36.8057C73.0137 34.8952 75.2631 33.3854 77.8514 32.2761C80.4397 31.1668 83.1821 30.6122 86.0785 30.6122ZM86.0785 62.6887C87.5575 62.6887 88.9441 62.4114 90.2383 61.8568C91.5941 61.2405 92.765 60.4394 93.751 59.4533C94.737 58.4673 95.5073 57.3272 96.062 56.0331C96.6782 54.6773 96.9864 53.2599 96.9864 51.7808C96.9864 50.3018 96.6782 48.9152 96.062 47.6211C95.5073 46.2653 94.737 45.0944 93.751 44.1084C92.765 43.1223 91.5941 42.352 90.2383 41.7974C88.9441 41.1811 87.5575 40.873 86.0785 40.873C84.5995 40.873 83.1821 41.1811 81.8263 41.7974C80.5321 42.352 79.392 43.1223 78.406 44.1084C77.42 45.0944 76.6497 46.2653 76.095 47.6211C75.5404 48.9152 75.2631 50.3018 75.2631 51.7808C75.2631 53.2599 75.5404 54.6773 76.095 56.0331C76.6497 57.3272 77.42 58.4673 78.406 59.4533C79.392 60.4394 80.5321 61.2405 81.8263 61.8568C83.1821 62.4114 84.5995 62.6887 86.0785 62.6887Z" fill="white"/>
+<path d="M115.936 30.5861C116.091 30.5861 116.222 30.5294 116.33 30.4162C116.443 30.303 116.499 30.1689 116.499 30.0139C116.499 29.859 116.443 29.7249 116.33 29.6116C116.222 29.4984 116.091 29.4418 115.936 29.4418H114.64V30.5861H115.936ZM117.617 30.0139C117.617 30.2046 117.587 30.3894 117.527 30.5682C117.468 30.741 117.384 30.8989 117.277 31.042C117.17 31.1791 117.042 31.3012 116.893 31.4085C116.744 31.5098 116.58 31.5843 116.401 31.632L117.617 33.4914H116.499L115.355 31.7035H114.64V33.4914H113.523V28.3333H115.936C116.169 28.3333 116.386 28.378 116.589 28.4674C116.791 28.5508 116.97 28.67 117.125 28.825C117.28 28.9799 117.399 29.1587 117.483 29.3613C117.572 29.564 117.617 29.7815 117.617 30.0139Z" fill="white"/>
+<circle cx="115.396" cy="31.2257" r="5.46082" stroke="white" stroke-width="0.510202"/>
+</svg></div>
+</div>
+
+</div><!-- /cnt -->
+</div><!-- /main -->
+</div><!-- /siteContent -->
+
+<script>
+function go(id){const e=document.getElementById(id);if(e)e.scrollIntoView({behavior:"smooth",block:"start"});return false;}
+function tfaq(el){el.parentElement.classList.toggle("open");}
+
+// ── ACESSO RESTRITO ──────────────────────────────────────────
+// Troque os valores abaixo para o código e senha que quiser usar
+const ACCESS_CODE = "1341";
+const ACCESS_PASS = "NTOXADEMICON";
+// ──────────────────────────────────────────────────────────────
+
+function checkLogin(){
+  const code = document.getElementById('loginCode').value.trim();
+  const pass = document.getElementById('loginPass').value.trim();
+  const err = document.getElementById('loginErr');
+  const codeInput = document.getElementById('loginCode');
+  const passInput = document.getElementById('loginPass');
+
+  if(code === ACCESS_CODE && pass === ACCESS_PASS){
+    sessionStorage.setItem('ademicon_unlocked', '1');
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('siteContent').classList.add('unlocked');
+  } else {
+    err.classList.add('show');
+    codeInput.classList.add('error');
+    passInput.classList.add('error');
+  }
+}
+
+// Mantém acesso liberado durante a sessão do navegador
+if(sessionStorage.getItem('ademicon_unlocked') === '1'){
+  document.getElementById('loginGate').style.display = 'none';
+  document.getElementById('siteContent').classList.add('unlocked');
+}
+
+function showCopyGroup(name, tabEl){
+  document.querySelectorAll('.copy-group').forEach(g=>g.classList.remove('active'));
+  document.querySelectorAll('.copy-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('copy-'+name).classList.add('active');
+  tabEl.classList.add('active');
+}
+
+function copyScript(btnEl){
+  const text = btnEl.parentElement.parentElement.querySelector('.copy-card-text').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const original = btnEl.innerHTML;
+    btnEl.innerHTML = '✓ Copiado';
+    btnEl.classList.add('copied');
+    setTimeout(()=>{ btnEl.innerHTML = original; btnEl.classList.remove('copied'); }, 1800);
+  });
+}
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("v");obs.unobserve(e.target);}});},{threshold:0.07});
+document.querySelectorAll(".r").forEach(e=>obs.observe(e));
+</script>
+</body></html>
